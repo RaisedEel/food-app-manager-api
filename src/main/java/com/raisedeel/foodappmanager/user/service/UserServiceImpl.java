@@ -5,6 +5,7 @@ import com.raisedeel.foodappmanager.user.dto.UserMapper;
 import com.raisedeel.foodappmanager.user.model.User;
 import com.raisedeel.foodappmanager.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -12,12 +13,14 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
   UserRepository userRepository;
+  PasswordEncoder passwordEncoder;
   UserMapper userMapper;
 
   @Override
   public UserDto createUser(UserDto userDto) {
-    User user = userRepository.save(userMapper.dtoToUser(userDto));
-    return userMapper.userToDto(user);
+    User user = userMapper.dtoToUser(userDto);
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    return userMapper.userToDto(userRepository.save(user));
   }
 
   @Override
