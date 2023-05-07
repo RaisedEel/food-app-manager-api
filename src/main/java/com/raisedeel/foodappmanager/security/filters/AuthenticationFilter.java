@@ -22,7 +22,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-  AuthenticationManager authenticationManager;
+  private AuthenticationManager authenticationManager;
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {

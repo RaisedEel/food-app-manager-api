@@ -1,37 +1,33 @@
 package com.raisedeel.foodappmanager.security;
 
-import com.raisedeel.foodappmanager.security.filters.AuthenticationFilter;
+import com.raisedeel.foodappmanager.security.providers.CustomAuthenticationProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+
+import static com.raisedeel.foodappmanager.security.filters.AuthFilterConfigurer.authFilterConfigurer;
 
 @AllArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-  AuthenticationProvider authenticationProvider;
+  CustomAuthenticationProvider customAuthenticationProvider;
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
-    AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager);
-    authenticationFilter.setFilterProcessesUrl("/user/authenticate");
-
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .csrf().disable()
         .authorizeHttpRequests()
         .requestMatchers("/user/register").permitAll()
         .anyRequest().authenticated()
         .and()
-        .authenticationProvider(authenticationProvider)
-        .addFilter(authenticationFilter);
+        .authenticationProvider(customAuthenticationProvider)
+        .apply(authFilterConfigurer());
 
     return http.build();
   }
-
 }
