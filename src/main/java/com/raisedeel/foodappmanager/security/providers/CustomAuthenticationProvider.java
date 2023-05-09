@@ -1,12 +1,12 @@
 package com.raisedeel.foodappmanager.security.providers;
 
-import com.raisedeel.foodappmanager.user.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-    User user = (User) userDetailsService.loadUserByUsername(authentication.getName());
+    UserDetails user = userDetailsService.loadUserByUsername(authentication.getName());
 
     if (!passwordEncoder.matches(authentication.getCredentials().toString(), user.getPassword())) {
       throw new BadCredentialsException("Incorrect password for the provided user");

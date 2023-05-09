@@ -19,6 +19,12 @@ public class UserController {
     return new ResponseEntity<>(userService.createUser(userDto), HttpStatus.CREATED);
   }
 
+  @PutMapping("/upgrade/{id}")
+  public ResponseEntity<HttpStatus> upgradeUserHandler(@PathVariable Long id) {
+    userService.upgradeUser(id);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
   @GetMapping("/{id}")
   public ResponseEntity<UserDto> retrieveUserHandler(@PathVariable Long id) {
     return new ResponseEntity<>(userService.retrieveUser(id), HttpStatus.OK);

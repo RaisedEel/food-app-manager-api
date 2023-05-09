@@ -15,6 +15,5 @@ public class AuthFilterConfigurer extends AbstractHttpConfigurer<AuthFilterConfi
     AuthenticationFilter authenticationFilter = new AuthenticationFilter(http.getSharedObject(AuthenticationManager.class));
     authenticationFilter.setFilterProcessesUrl("/user/authenticate");
     http.addFilter(authenticationFilter);
-    http.addFilterAfter(new JwtAuthorizationFilter(), AuthenticationFilter.class);
   }
 }

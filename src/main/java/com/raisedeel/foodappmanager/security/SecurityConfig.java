@@ -1,5 +1,7 @@
 package com.raisedeel.foodappmanager.security;
 
+import com.raisedeel.foodappmanager.security.filters.AuthenticationFilter;
+import com.raisedeel.foodappmanager.security.filters.JwtAuthorizationFilter;
 import com.raisedeel.foodappmanager.security.providers.CustomAuthenticationProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +18,8 @@ import static com.raisedeel.foodappmanager.security.filters.AuthFilterConfigurer
 @EnableWebSecurity
 public class SecurityConfig {
 
-  CustomAuthenticationProvider customAuthenticationProvider;
+  private CustomAuthenticationProvider customAuthenticationProvider;
+  private JwtAuthorizationFilter authorizationFilter;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -24,11 +27,13 @@ public class SecurityConfig {
         .csrf().disable()
         .authorizeHttpRequests()
         .requestMatchers("/user/register").permitAll()
+        .requestMatchers("/user/upgrade/*").hasRole("ADMIN")
         .anyRequest().authenticated()
         .and()
         .authenticationProvider(customAuthenticationProvider)
         .apply(authFilterConfigurer())
         .and()
+        .addFilterAfter(authorizationFilter, AuthenticationFilter.class)
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
     return http.build();
