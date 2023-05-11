@@ -26,7 +26,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
       throw new BadCredentialsException("Incorrect password for the provided user");
     }
 
-    return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+    return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
   }
 
   @Override

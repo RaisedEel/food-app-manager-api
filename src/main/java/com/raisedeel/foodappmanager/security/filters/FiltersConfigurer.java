@@ -4,10 +4,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
-public class AuthFilterConfigurer extends AbstractHttpConfigurer<AuthFilterConfigurer, HttpSecurity> {
+public class FiltersConfigurer extends AbstractHttpConfigurer<FiltersConfigurer, HttpSecurity> {
 
-  public static AuthFilterConfigurer authFilterConfigurer() {
-    return new AuthFilterConfigurer();
+  public static FiltersConfigurer filtersConfigurer() {
+    return new FiltersConfigurer();
   }
 
   @Override
@@ -15,5 +15,6 @@ public class AuthFilterConfigurer extends AbstractHttpConfigurer<AuthFilterConfi
     AuthenticationFilter authenticationFilter = new AuthenticationFilter(http.getSharedObject(AuthenticationManager.class));
     authenticationFilter.setFilterProcessesUrl("/user/authenticate");
     http.addFilter(authenticationFilter);
+    http.addFilterAfter(new JwtAuthorizationFilter(), AuthenticationFilter.class);
   }
 }
