@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/user")
@@ -23,6 +25,11 @@ public class UserController {
   public ResponseEntity<HttpStatus> upgradeUserHandler(@PathVariable Long id) {
     userService.upgradeUser(id);
     return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @GetMapping("/owners")
+  public ResponseEntity<List<UserDto>> retrieveOwnersHandler() {
+    return new ResponseEntity<>(userService.retrieveOwners(), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")

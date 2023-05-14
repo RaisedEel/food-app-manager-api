@@ -4,10 +4,14 @@ import com.raisedeel.foodappmanager.user.dto.UserDto;
 import com.raisedeel.foodappmanager.user.dto.UserMapper;
 import com.raisedeel.foodappmanager.user.model.Role;
 import com.raisedeel.foodappmanager.user.model.User;
+import com.raisedeel.foodappmanager.user.model.UserOwner;
 import com.raisedeel.foodappmanager.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service
@@ -26,6 +30,11 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public List<UserDto> retrieveOwners() {
+    return userRepository.findAllOwners().stream().map(userMapper::userToDto).toList();
+  }
+
+  @Override
   public UserDto retrieveUser(Long id) {
     return userMapper.userToDto(getUserById(id));
   }
@@ -39,8 +48,19 @@ public class UserServiceImpl implements UserService {
   @Override
   public void upgradeUser(Long id) {
     User user = getUserById(id);
-    user.setRole(Role.ROLE_OWNER);
-    userRepository.save(user);
+
+    UserOwner userOwner = new UserOwner(
+        null,
+        user.getName(),
+        user.getUsername(),
+        user.getPassword(),
+        user.getAddress(),
+        Role.ROLE_OWNER,
+        UUID.randomUUID().toString()
+    );
+
+    userRepository.delete(user);
+    userRepository.save(userOwner);
   }
 
   private User getUserById(Long id) {

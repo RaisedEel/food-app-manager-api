@@ -24,9 +24,11 @@ public class FoodAppManagerApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    // Simple password, better to change in production
-    User admin = new User(null, "administrador", "admin", passwordEncoder().encode("1234"), "Nowhere", Role.ROLE_ADMIN);
-    userRepository.save(admin);
+    if (userRepository.findByEmail("admin").isEmpty()) {
+      // Simple password, better to change in production;
+      User admin = new User(null, "administrador", "admin", passwordEncoder().encode("1234"), "Nowhere", Role.ROLE_ADMIN);
+      userRepository.save(admin);
+    }
   }
 
   @Bean

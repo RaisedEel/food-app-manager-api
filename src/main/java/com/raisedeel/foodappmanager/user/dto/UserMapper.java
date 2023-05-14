@@ -11,6 +11,6 @@ public interface UserMapper {
   UserDto userToDto(User user);
 
   User dtoToUser(UserDto userDto);
-
+  
   User updateFromDto(UserDto userDto, @MappingTarget User user);
 }
