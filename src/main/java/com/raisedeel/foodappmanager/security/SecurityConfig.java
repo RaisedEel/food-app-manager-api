@@ -17,6 +17,7 @@ import static com.raisedeel.foodappmanager.security.filters.FiltersConfigurer.fi
 public class SecurityConfig {
 
   private CustomAuthenticationProvider customAuthenticationProvider;
+  private ExceptionHandlerEntry exceptionHandlerEntry;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -29,6 +30,8 @@ public class SecurityConfig {
         .and()
         .authenticationProvider(customAuthenticationProvider)
         .apply(filtersConfigurer())
+        .and()
+        .exceptionHandling().authenticationEntryPoint(exceptionHandlerEntry)
         .and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

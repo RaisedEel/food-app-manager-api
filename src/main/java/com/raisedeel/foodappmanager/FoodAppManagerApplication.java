@@ -1,5 +1,6 @@
 package com.raisedeel.foodappmanager;
 
+import com.raisedeel.foodappmanager.exception.exceptions.UserNotFoundException;
 import com.raisedeel.foodappmanager.user.model.Role;
 import com.raisedeel.foodappmanager.user.model.User;
 import com.raisedeel.foodappmanager.user.repository.UserRepository;
@@ -34,7 +35,7 @@ public class FoodAppManagerApplication implements CommandLineRunner {
   @Bean
   UserDetailsService userDetailsService() {
     return username -> userRepository.findByEmail(username)
-        .orElseThrow(() -> new RuntimeException("User not Found"));
+        .orElseThrow(UserNotFoundException::new);
   }
 
   @Bean
