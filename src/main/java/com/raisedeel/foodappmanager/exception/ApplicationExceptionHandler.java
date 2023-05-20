@@ -13,12 +13,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(AuthenticationException.class)
-  public ResponseEntity<ErrorResponse> authenticationExceptionHandler(RuntimeException ex) {
+  public ResponseEntity<ErrorResponse> handleAuthenticationException(Exception ex) {
     return new ResponseEntity<>(new ErrorResponse(401, ex.getMessage()), HttpStatus.UNAUTHORIZED);
   }
 
   @ExceptionHandler(EntityNotFoundException.class)
-  public ResponseEntity<ErrorResponse> entityNotFoundException(Exception ex) {
+  public ResponseEntity<ErrorResponse> handleEntityNotFoundException(Exception ex) {
     return new ResponseEntity<>(new ErrorResponse(404, ex.getMessage()), HttpStatus.NOT_FOUND);
   }
 }
