@@ -1,6 +1,6 @@
 package com.raisedeel.foodappmanager.user.service;
 
-import com.raisedeel.foodappmanager.exception.exceptions.UserNotFoundException;
+import com.raisedeel.foodappmanager.exception.exceptions.EntityNotFoundException;
 import com.raisedeel.foodappmanager.user.dto.UserDto;
 import com.raisedeel.foodappmanager.user.dto.UserMapper;
 import com.raisedeel.foodappmanager.user.model.Role;
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 
   private User getUserById(Long id) {
     return userRepository.findById(id)
-        .orElseThrow(UserNotFoundException::new);
+        .orElseThrow(() -> new EntityNotFoundException("User"));
   }
 
 }

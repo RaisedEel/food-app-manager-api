@@ -1,6 +1,5 @@
 package com.raisedeel.foodappmanager;
 
-import com.raisedeel.foodappmanager.exception.exceptions.UserNotFoundException;
 import com.raisedeel.foodappmanager.user.model.Role;
 import com.raisedeel.foodappmanager.user.model.User;
 import com.raisedeel.foodappmanager.user.repository.UserRepository;
@@ -10,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -35,7 +35,7 @@ public class FoodAppManagerApplication implements CommandLineRunner {
   @Bean
   UserDetailsService userDetailsService() {
     return username -> userRepository.findByEmail(username)
-        .orElseThrow(UserNotFoundException::new);
+        .orElseThrow(() -> new UsernameNotFoundException("No user exists with that email address"));
   }
 
   @Bean

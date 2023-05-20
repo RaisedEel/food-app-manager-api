@@ -1,5 +1,6 @@
 package com.raisedeel.foodappmanager.exception;
 
+import com.raisedeel.foodappmanager.exception.exceptions.EntityNotFoundException;
 import com.raisedeel.foodappmanager.exception.model.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +13,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(AuthenticationException.class)
-  public ResponseEntity<ErrorResponse> authenticationExceptionHandler(Exception ex) {
-    return new ResponseEntity<>(new ErrorResponse(400, ex.getMessage()), HttpStatus.BAD_REQUEST);
+  public ResponseEntity<ErrorResponse> authenticationExceptionHandler(RuntimeException ex) {
+    return new ResponseEntity<>(new ErrorResponse(401, ex.getMessage()), HttpStatus.UNAUTHORIZED);
   }
 
-  public ResponseEntity<ErrorResponse> userNotFoundException(Exception ex) {
+  @ExceptionHandler(EntityNotFoundException.class)
+  public ResponseEntity<ErrorResponse> entityNotFoundException(Exception ex) {
     return new ResponseEntity<>(new ErrorResponse(404, ex.getMessage()), HttpStatus.NOT_FOUND);
   }
-
 }
