@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "owners")
 public class UserOwner extends User {
+
   private String restaurantId;
 
   public UserOwner(Long id, String name, String email, String password, String address, Role role, String restaurantId) {

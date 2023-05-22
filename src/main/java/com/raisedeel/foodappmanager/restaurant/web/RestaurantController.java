@@ -1,0 +1,34 @@
+package com.raisedeel.foodappmanager.restaurant.web;
+
+import com.raisedeel.foodappmanager.restaurant.dto.RestaurantDto;
+import com.raisedeel.foodappmanager.restaurant.service.RestaurantService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@AllArgsConstructor
+@RequestMapping("/restaurant")
+@RestController
+public class RestaurantController {
+
+  RestaurantService restaurantService;
+
+  @PostMapping()
+  public ResponseEntity<RestaurantDto> createRestaurantHandler(@RequestBody RestaurantDto restaurantDto) {
+    return new ResponseEntity<>(restaurantService.createRestaurant(restaurantDto), HttpStatus.CREATED);
+  }
+
+  @GetMapping("/all")
+  public ResponseEntity<List<RestaurantDto>> retrieveRestaurantsHandler() {
+    return new ResponseEntity<>(restaurantService.retrieveRestaurants(), HttpStatus.OK);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<RestaurantDto> updateRestaurantHandler(@PathVariable Long id, @RequestBody RestaurantDto restaurantDto) {
+    return new ResponseEntity<>(restaurantService.updateRestaurant(id, restaurantDto), HttpStatus.OK);
+  }
+
+}

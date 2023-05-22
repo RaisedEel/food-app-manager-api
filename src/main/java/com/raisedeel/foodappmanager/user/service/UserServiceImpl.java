@@ -43,6 +43,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserDto updateUser(Long id, UserDto userDto) {
     User updatedUser = userMapper.updateFromDto(userDto, getUserById(id));
+
+    if (userDto.getPassword() != null) {
+      updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+    }
+
     return userMapper.userToDto(userRepository.save(updatedUser));
   }
 
