@@ -4,6 +4,7 @@ import com.raisedeel.foodappmanager.security.providers.CustomAuthenticationProvi
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -25,7 +26,8 @@ public class SecurityConfig {
         .csrf().disable()
         .authorizeHttpRequests()
         .requestMatchers("/user/register").permitAll()
-        .requestMatchers("/restaurant/*", "restaurant/all").hasAnyRole("ADMIN", "OWNER")
+        .requestMatchers(HttpMethod.GET, "/restaurant/*", "restaurant/all").permitAll()
+        .requestMatchers("/restaurant/*").hasAnyRole("ADMIN", "OWNER")
         .requestMatchers("/user/upgrade/**", "/user/demote/*", "/restaurant/remove/*").hasRole("ADMIN")
         .anyRequest().authenticated()
         .and()
