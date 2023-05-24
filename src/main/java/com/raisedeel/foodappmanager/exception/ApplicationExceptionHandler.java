@@ -21,4 +21,10 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
   public ResponseEntity<ErrorResponse> handleEntityNotFoundException(Exception ex) {
     return new ResponseEntity<>(new ErrorResponse(404, ex.getMessage()), HttpStatus.NOT_FOUND);
   }
+
+  @ExceptionHandler(RuntimeException.class)
+  public ResponseEntity<ErrorResponse> handleRuntimeException(Exception ex) {
+    return new ResponseEntity<>(new ErrorResponse(400, ex.getMessage()), HttpStatus.BAD_REQUEST);
+  }
+
 }

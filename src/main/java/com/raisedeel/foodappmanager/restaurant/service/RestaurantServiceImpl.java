@@ -24,6 +24,11 @@ public class RestaurantServiceImpl implements RestaurantService {
   }
 
   @Override
+  public RestaurantDto retrieveRestaurant(Long id) {
+    return restaurantMapper.restaurantToDto(getRestaurantById(id));
+  }
+
+  @Override
   public List<RestaurantDto> retrieveRestaurants() {
     return ((List<Restaurant>) restaurantRepository.findAll())
         .stream()
@@ -39,6 +44,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     );
 
     return restaurantMapper.restaurantToDto(restaurantRepository.save(updatedRestaurant));
+  }
+
+  @Override
+  public void deleteRestaurant(Long id) {
+    restaurantRepository.deleteById(id);
   }
 
   private Restaurant getRestaurantById(Long id) {

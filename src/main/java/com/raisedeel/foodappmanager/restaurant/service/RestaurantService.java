@@ -8,8 +8,11 @@ public interface RestaurantService {
 
   RestaurantDto createRestaurant(RestaurantDto restaurantDto);
 
+  RestaurantDto retrieveRestaurant(Long id);
+
   List<RestaurantDto> retrieveRestaurants();
 
   RestaurantDto updateRestaurant(Long id, RestaurantDto restaurantDto);
 
+  void deleteRestaurant(Long id);
 }

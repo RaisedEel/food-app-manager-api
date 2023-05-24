@@ -1,16 +1,19 @@
 package com.raisedeel.foodappmanager.user.dto;
 
+import com.raisedeel.foodappmanager.restaurant.dto.RestaurantMapper;
 import com.raisedeel.foodappmanager.user.model.User;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import com.raisedeel.foodappmanager.user.model.UserOwner;
+import org.mapstruct.*;
 
 @Mapper(
-    componentModel = "spring"
+    componentModel = "spring",
+    injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+    uses = RestaurantMapper.class
 )
 public interface UserMapper {
   UserDto userToDto(User user);
+
+  UserDto ownerToDto(UserOwner user);
 
   User dtoToUser(UserDto userDto);
 

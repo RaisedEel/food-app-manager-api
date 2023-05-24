@@ -1,24 +1,28 @@
 package com.raisedeel.foodappmanager.user.service;
 
 import com.raisedeel.foodappmanager.exception.exceptions.EntityNotFoundException;
+import com.raisedeel.foodappmanager.restaurant.model.Restaurant;
+import com.raisedeel.foodappmanager.restaurant.repository.RestaurantRepository;
 import com.raisedeel.foodappmanager.user.dto.UserDto;
 import com.raisedeel.foodappmanager.user.dto.UserMapper;
 import com.raisedeel.foodappmanager.user.model.Role;
 import com.raisedeel.foodappmanager.user.model.User;
 import com.raisedeel.foodappmanager.user.model.UserOwner;
+import com.raisedeel.foodappmanager.user.repository.OwnerRepository;
 import com.raisedeel.foodappmanager.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @AllArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 
   UserRepository userRepository;
+  OwnerRepository ownerRepository;
+  RestaurantRepository restaurantRepository;
   PasswordEncoder passwordEncoder;
   UserMapper userMapper;
 
@@ -32,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<UserDto> retrieveOwners() {
-    return userRepository.findAllOwners().stream().map(userMapper::userToDto).toList();
+    return ((List<UserOwner>) ownerRepository.findAll()).stream().map(userMapper::ownerToDto).toList();
   }
 
   @Override
@@ -52,8 +56,17 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void upgradeUser(Long id) {
-    User user = getUserById(id);
+  public void upgradeUser(Long userId, Long restaurantId) {
+    User user = getUserById(userId);
+    Restaurant restaurant = getRestaurantById(restaurantId);
+
+    if (!user.getRole().equals(Role.ROLE_CLIENT)) {
+      throw new RuntimeException("This operation cannot be executed");
+    }
+
+    if (restaurant.getOwner() != null) {
+      throw new RuntimeException("Restaurant already owned");
+    }
 
     UserOwner userOwner = new UserOwner(
         null,
@@ -62,16 +75,39 @@ public class UserServiceImpl implements UserService {
         user.getPassword(),
         user.getAddress(),
         Role.ROLE_OWNER,
-        UUID.randomUUID().toString()
+        restaurant
     );
 
     userRepository.delete(user);
     userRepository.save(userOwner);
   }
 
+  @Override
+  public void demoteUser(Long userId) {
+    UserOwner owner = ownerRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User"));
+
+    User demotedUser = new User(
+        null,
+        owner.getName(),
+        owner.getUsername(),
+        owner.getPassword(),
+        owner.getAddress(),
+        Role.ROLE_CLIENT
+    );
+
+    ownerRepository.delete(owner);
+    userRepository.save(demotedUser);
+  }
+
   private User getUserById(Long id) {
     return userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("User"));
+  }
+
+  private Restaurant getRestaurantById(Long id) {
+    return restaurantRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("Restaurant"));
   }
 
 }

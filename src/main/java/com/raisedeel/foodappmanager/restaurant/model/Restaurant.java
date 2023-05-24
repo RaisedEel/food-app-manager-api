@@ -1,9 +1,8 @@
 package com.raisedeel.foodappmanager.restaurant.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.raisedeel.foodappmanager.user.model.UserOwner;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,4 +23,8 @@ public class Restaurant {
   private String address;
   private double rating;
   private String photoUrl;
+
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  @OneToOne(mappedBy = "restaurantOwned")
+  private UserOwner owner;
 }

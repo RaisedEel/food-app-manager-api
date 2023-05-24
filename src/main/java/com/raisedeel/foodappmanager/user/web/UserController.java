@@ -36,9 +36,15 @@ public class UserController {
     return new ResponseEntity<>(userService.updateUser(id, userDto), HttpStatus.OK);
   }
 
-  @PutMapping("/upgrade/{id}")
-  public ResponseEntity<HttpStatus> upgradeUserHandler(@PathVariable Long id) {
-    userService.upgradeUser(id);
+  @PutMapping("/upgrade/{userId}/restaurant/{restaurantId}")
+  public ResponseEntity<HttpStatus> upgradeUserHandler(@PathVariable Long userId, @PathVariable Long restaurantId) {
+    userService.upgradeUser(userId, restaurantId);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @PutMapping("/demote/{userId}")
+  public ResponseEntity<HttpStatus> demoteUserHandler(@PathVariable Long userId) {
+    userService.demoteUser(userId);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 

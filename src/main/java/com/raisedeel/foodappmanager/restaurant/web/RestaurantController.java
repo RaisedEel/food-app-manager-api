@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @AllArgsConstructor
-@RequestMapping("/restaurant")
 @RestController
+@RequestMapping("/restaurant")
 public class RestaurantController {
 
   RestaurantService restaurantService;
@@ -19,6 +19,11 @@ public class RestaurantController {
   @PostMapping()
   public ResponseEntity<RestaurantDto> createRestaurantHandler(@RequestBody RestaurantDto restaurantDto) {
     return new ResponseEntity<>(restaurantService.createRestaurant(restaurantDto), HttpStatus.CREATED);
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<RestaurantDto> retrieveRestaurantHandler(@PathVariable Long id) {
+    return new ResponseEntity<>(restaurantService.retrieveRestaurant(id), HttpStatus.OK);
   }
 
   @GetMapping("/all")
@@ -29,6 +34,12 @@ public class RestaurantController {
   @PutMapping("/{id}")
   public ResponseEntity<RestaurantDto> updateRestaurantHandler(@PathVariable Long id, @RequestBody RestaurantDto restaurantDto) {
     return new ResponseEntity<>(restaurantService.updateRestaurant(id, restaurantDto), HttpStatus.OK);
+  }
+
+  @DeleteMapping("/remove/{id}")
+  public ResponseEntity<HttpStatus> deleteRestaurantHandler(@PathVariable Long id) {
+    restaurantService.deleteRestaurant(id);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
 }
