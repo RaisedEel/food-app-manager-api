@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/dish")
@@ -14,14 +16,19 @@ public class DishController {
 
   DishService dishService;
 
-  @PostMapping
-  public ResponseEntity<DishDto> createDishHandler(@RequestBody DishDto dishDto) {
-    return new ResponseEntity<>(dishService.createDish(dishDto), HttpStatus.CREATED);
+  @PostMapping("/restaurant/{restaurantId}")
+  public ResponseEntity<DishDto> createDishHandler(@PathVariable Long restaurantId, @RequestBody DishDto dishDto) {
+    return new ResponseEntity<>(dishService.createDish(dishDto, restaurantId), HttpStatus.CREATED);
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<DishDto> retrieveDishHandler(@PathVariable Long id) {
     return new ResponseEntity<>(dishService.retrieveDish(id), HttpStatus.OK);
+  }
+
+  @GetMapping("restaurant/{restaurantId}")
+  public ResponseEntity<List<DishDto>> retrieveDishesByRestaurantHandler(@PathVariable Long restaurantId) {
+    return new ResponseEntity<>(dishService.retrieveDishesByRestaurant(restaurantId), HttpStatus.OK);
   }
 
   @PutMapping("/{id}")

@@ -48,7 +48,14 @@ public class RestaurantServiceImpl implements RestaurantService {
 
   @Override
   public void deleteRestaurant(Long id) {
-    restaurantRepository.deleteById(id);
+    Restaurant restaurant = getRestaurantById(id);
+
+    if (restaurant.getOwner() != null) {
+      throw new RuntimeException("This restaurant has an owner. " +
+          "First demote the owner before attempting to delete the restaurant.");
+    }
+
+    restaurantRepository.delete(restaurant);
   }
 
   private Restaurant getRestaurantById(Long id) {

@@ -1,13 +1,13 @@
 package com.raisedeel.foodappmanager.restaurant.dto;
 
+import com.raisedeel.foodappmanager.dish.dto.DishMapper;
 import com.raisedeel.foodappmanager.restaurant.model.Restaurant;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 @Mapper(
-    componentModel = "spring"
+    componentModel = "spring",
+    injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+    uses = DishMapper.class
 )
 public interface RestaurantMapper {
 

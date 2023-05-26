@@ -1,12 +1,8 @@
 package com.raisedeel.foodappmanager.dish.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.raisedeel.foodappmanager.restaurant.model.Restaurant;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -20,4 +16,10 @@ public class Dish {
   private double price;
   private String category;
   private String description;
+
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  @ManyToOne
+  @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
+  private Restaurant restaurant;
 }

@@ -1,11 +1,11 @@
 package com.raisedeel.foodappmanager.restaurant.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.raisedeel.foodappmanager.dish.model.Dish;
 import com.raisedeel.foodappmanager.user.model.UserOwner;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -24,7 +24,11 @@ public class Restaurant {
   private double rating;
   private String photoUrl;
 
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   @OneToOne(mappedBy = "restaurantOwned")
   private UserOwner owner;
+
+  @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+  private Set<Dish> menu;
 }
