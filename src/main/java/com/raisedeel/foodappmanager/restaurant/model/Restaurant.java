@@ -1,10 +1,12 @@
 package com.raisedeel.foodappmanager.restaurant.model;
 
 import com.raisedeel.foodappmanager.dish.model.Dish;
+import com.raisedeel.foodappmanager.subscription.model.Subscription;
 import com.raisedeel.foodappmanager.user.model.UserOwner;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -31,4 +33,13 @@ public class Restaurant {
 
   @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
   private Set<Dish> menu;
+
+  @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+  private List<Subscription> subscriptions;
+
+  public int getTotalOfRatings() {
+    return (int) getSubscriptions().stream()
+        .filter((sub) -> sub.getRating() > 0)
+        .mapToInt(Subscription::getRating).count();
+  }
 }

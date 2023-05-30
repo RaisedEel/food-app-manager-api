@@ -1,9 +1,11 @@
 package com.raisedeel.foodappmanager.restaurant.dto;
 
 import com.raisedeel.foodappmanager.dish.dto.DishDto;
+import com.raisedeel.foodappmanager.subscription.dto.SubscriptionDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -19,4 +21,5 @@ public class RestaurantDto {
   private double rating;
   private String photoUrl;
   private Set<DishDto> menu;
+  private List<SubscriptionDto> subscriptions;
 }

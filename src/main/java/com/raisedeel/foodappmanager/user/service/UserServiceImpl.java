@@ -93,7 +93,8 @@ public class UserServiceImpl implements UserService {
         owner.getUsername(),
         owner.getPassword(),
         owner.getAddress(),
-        Role.ROLE_CLIENT
+        Role.ROLE_CLIENT,
+        null
     );
 
     ownerRepository.delete(owner);

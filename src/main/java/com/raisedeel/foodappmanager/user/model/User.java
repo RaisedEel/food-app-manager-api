@@ -1,5 +1,6 @@
 package com.raisedeel.foodappmanager.user.model;
 
+import com.raisedeel.foodappmanager.subscription.model.Subscription;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +29,9 @@ public class User implements UserDetails {
   private String address;
   @Enumerated(value = EnumType.STRING)
   private Role role;
+
+  @OneToMany(mappedBy = "user")
+  private List<Subscription> subscriptions;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

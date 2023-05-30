@@ -21,7 +21,7 @@ public class UserOwner extends User {
   private Restaurant restaurantOwned;
 
   public UserOwner(Long id, String name, String email, String password, String address, Role role, Restaurant restaurantOwned) {
-    super(id, name, email, password, address, role);
+    super(id, name, email, password, address, role, null);
     this.restaurantOwned = restaurantOwned;
   }
 }
