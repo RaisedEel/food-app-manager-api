@@ -1,6 +1,7 @@
 package com.raisedeel.foodappmanager.user.service;
 
 import com.raisedeel.foodappmanager.exception.exceptions.EntityNotFoundException;
+import com.raisedeel.foodappmanager.exception.exceptions.InvalidOperationException;
 import com.raisedeel.foodappmanager.restaurant.model.Restaurant;
 import com.raisedeel.foodappmanager.restaurant.repository.RestaurantRepository;
 import com.raisedeel.foodappmanager.user.dto.UserDto;
@@ -61,11 +62,11 @@ public class UserServiceImpl implements UserService {
     Restaurant restaurant = getRestaurantById(restaurantId);
 
     if (!user.getRole().equals(Role.ROLE_CLIENT)) {
-      throw new RuntimeException("This operation cannot be executed");
+      throw new InvalidOperationException();
     }
 
     if (restaurant.getOwner() != null) {
-      throw new RuntimeException("Restaurant already owned");
+      throw new InvalidOperationException("Restaurant already owned");
     }
 
     UserOwner userOwner = new UserOwner(

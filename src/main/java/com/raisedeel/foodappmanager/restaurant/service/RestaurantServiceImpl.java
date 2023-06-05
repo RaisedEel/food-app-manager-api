@@ -1,6 +1,7 @@
 package com.raisedeel.foodappmanager.restaurant.service;
 
 import com.raisedeel.foodappmanager.exception.exceptions.EntityNotFoundException;
+import com.raisedeel.foodappmanager.exception.exceptions.InvalidOperationException;
 import com.raisedeel.foodappmanager.restaurant.dto.RestaurantDto;
 import com.raisedeel.foodappmanager.restaurant.dto.RestaurantMapper;
 import com.raisedeel.foodappmanager.restaurant.model.Restaurant;
@@ -51,8 +52,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     Restaurant restaurant = getRestaurantById(id);
 
     if (restaurant.getOwner() != null) {
-      throw new RuntimeException("This restaurant has an owner. " +
-          "First demote the owner before attempting to delete the restaurant.");
+      throw new InvalidOperationException("This restaurant has an owner. " +
+          "First demote the owner before attempting this operation");
     }
 
     restaurantRepository.delete(restaurant);
