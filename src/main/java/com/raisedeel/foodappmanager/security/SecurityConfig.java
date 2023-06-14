@@ -1,10 +1,12 @@
 package com.raisedeel.foodappmanager.security;
 
 import com.raisedeel.foodappmanager.security.providers.CustomAuthenticationProvider;
+import com.raisedeel.foodappmanager.security.validators.AuthenticationValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,6 +21,7 @@ public class SecurityConfig {
 
   private CustomAuthenticationProvider customAuthenticationProvider;
   private ExceptionHandlerEntry exceptionHandlerEntry;
+  private AuthenticationValidator authenticationValidator;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -27,8 +30,25 @@ public class SecurityConfig {
         .authorizeHttpRequests()
         .requestMatchers("/user/register").permitAll()
         .requestMatchers(HttpMethod.GET, "/restaurant/**", "/dish/**", "/subscription/**").permitAll()
+        .requestMatchers(HttpMethod.PUT, "/user/{id}").access(
+            (authentication, context) ->
+                new AuthorizationDecision(
+                    authenticationValidator.checkUserId(authentication.get(), context.getVariables())
+                )
+        )
+        .requestMatchers(HttpMethod.PUT, "/restaurant/{id}", "/dish/restaurant/{id}").access(
+            (authentication, context) ->
+                new AuthorizationDecision(
+                    authenticationValidator.checkRestaurantOwner(authentication.get(), context.getVariables())
+                )
+        )
+        .requestMatchers("dish/{id}").access(
+            (authentication, context) ->
+                new AuthorizationDecision(
+                    authenticationValidator.checkDishOwner(authentication.get(), context.getVariables())
+                )
+        )
         .requestMatchers("/user/upgrade/**", "/user/demote/*", "/restaurant/remove/*").hasRole("ADMIN")
-        .requestMatchers("/restaurant/*", "/dish/restaurant/*", "dish/*").hasAnyRole("ADMIN", "OWNER")
         .anyRequest().authenticated()
         .and()
         .authenticationProvider(customAuthenticationProvider)
