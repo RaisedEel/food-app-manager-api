@@ -52,10 +52,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     Subscription subscription = getSubscriptionByUserIdAndRestaurantId(userId, restaurantId);
 
     restaurant.setRating(calculateRating(
-        restaurant.getTotalOfRatings(),
-        restaurant.getRating(),
         subscription.getRating(),
-        subscriptionDto.getRating()
+        subscriptionDto.getRating(),
+        restaurant.getTotalOfRatings(),
+        restaurant.getRating()
     ));
 
     restaurantRepository.save(restaurant);
@@ -79,25 +79,31 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         .orElseThrow(() -> new EntityNotFoundException("User"));
   }
 
-  @SuppressWarnings("ReassignedVariable")
-  private double calculateRating(int numberOfRatings, double totalRating, int oldUserRating, int newUserRating) {
-
-    double newTotalRating = totalRating;
+  private double calculateRating(int oldUserRating, int newUserRating, int numberOfRatings, double totalRating) {
+    double subtractedRating = subtractRating(oldUserRating, numberOfRatings, totalRating);
 
     if (oldUserRating > 0) {
-      numberOfRatings--;
-      if (numberOfRatings == 0) {
-        newTotalRating = 0.0;
-      } else {
-        newTotalRating = (totalRating * (numberOfRatings + 1) - oldUserRating) / numberOfRatings;
+      return addRating(newUserRating, numberOfRatings - 1, subtractedRating);
+    } else {
+      return addRating(newUserRating, numberOfRatings, subtractedRating);
+    }
+  }
+
+  private double subtractRating(int rating, int numberOfRatings, double totalRating) {
+    if (rating > 0) {
+      if (numberOfRatings - 1 == 0) {
+        return 0.0;
       }
+
+      return (totalRating * numberOfRatings - rating) / (numberOfRatings - 1);
     }
 
-    if (newUserRating <= 0) return newTotalRating;
-    numberOfRatings++;
-    newTotalRating = newTotalRating + ((newUserRating - newTotalRating) / numberOfRatings);
+    return totalRating;
+  }
 
-    return newTotalRating;
+  private double addRating(int rating, int numberOfRatings, double totalRating) {
+    if (rating <= 0) return totalRating;
+    return totalRating + (rating - totalRating) / (numberOfRatings + 1);
   }
 
 }
