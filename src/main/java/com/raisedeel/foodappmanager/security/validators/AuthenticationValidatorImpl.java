@@ -29,7 +29,7 @@ public class AuthenticationValidatorImpl implements AuthenticationValidator {
       return true;
     }
 
-    Long id = Long.parseLong(attributes.get("id"));
+    Long id = Long.valueOf(attributes.get("id"));
     Optional<User> optionalUser = userRepository.findById(id);
 
     // Check if the user exists before checking it against the authentication object, if not user exists returns false,
@@ -46,7 +46,7 @@ public class AuthenticationValidatorImpl implements AuthenticationValidator {
       return false;
     }
 
-    Long id = Long.parseLong(attributes.get("id"));
+    Long id = Long.valueOf(attributes.get("id"));
     Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(id);
 
     if (optionalRestaurant.isEmpty()) {
@@ -67,7 +67,7 @@ public class AuthenticationValidatorImpl implements AuthenticationValidator {
       return false;
     }
 
-    Long id = Long.parseLong(attributes.get("id"));
+    Long id = Long.valueOf(attributes.get("id"));
     Optional<Dish> optionalDish = dishRepository.findById(id);
 
     if (optionalDish.isEmpty()) {

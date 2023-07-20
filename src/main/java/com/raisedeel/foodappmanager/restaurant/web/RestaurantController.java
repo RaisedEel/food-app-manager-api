@@ -2,6 +2,7 @@ package com.raisedeel.foodappmanager.restaurant.web;
 
 import com.raisedeel.foodappmanager.restaurant.dto.RestaurantDto;
 import com.raisedeel.foodappmanager.restaurant.service.RestaurantService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class RestaurantController {
   RestaurantService restaurantService;
 
   @PostMapping()
-  public ResponseEntity<RestaurantDto> createRestaurantHandler(@RequestBody RestaurantDto restaurantDto) {
+  public ResponseEntity<RestaurantDto> createRestaurantHandler(@Valid @RequestBody RestaurantDto restaurantDto) {
     return new ResponseEntity<>(restaurantService.createRestaurant(restaurantDto), HttpStatus.CREATED);
   }
 
@@ -32,7 +33,7 @@ public class RestaurantController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<RestaurantDto> updateRestaurantHandler(@PathVariable Long id, @RequestBody RestaurantDto restaurantDto) {
+  public ResponseEntity<RestaurantDto> updateRestaurantHandler(@PathVariable Long id, @Valid @RequestBody RestaurantDto restaurantDto) {
     return new ResponseEntity<>(restaurantService.updateRestaurant(id, restaurantDto), HttpStatus.OK);
   }
 

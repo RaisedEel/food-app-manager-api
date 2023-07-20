@@ -2,6 +2,7 @@ package com.raisedeel.foodappmanager.user.web;
 
 import com.raisedeel.foodappmanager.user.dto.UserDto;
 import com.raisedeel.foodappmanager.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class UserController {
   UserService userService;
 
   @PostMapping("/register")
-  public ResponseEntity<UserDto> createUserHandler(@RequestBody UserDto userDto) {
+  public ResponseEntity<UserDto> createUserHandler(@Valid @RequestBody UserDto userDto) {
     return new ResponseEntity<>(userService.createUser(userDto), HttpStatus.CREATED);
   }
 
@@ -32,7 +33,7 @@ public class UserController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<UserDto> updateUserHandler(@PathVariable Long id, @RequestBody UserDto userDto) {
+  public ResponseEntity<UserDto> updateUserHandler(@PathVariable Long id, @Valid @RequestBody UserDto userDto) {
     return new ResponseEntity<>(userService.updateUser(id, userDto), HttpStatus.OK);
   }
 

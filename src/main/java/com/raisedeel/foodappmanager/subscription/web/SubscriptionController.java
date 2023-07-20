@@ -2,6 +2,7 @@ package com.raisedeel.foodappmanager.subscription.web;
 
 import com.raisedeel.foodappmanager.subscription.dto.SubscriptionDto;
 import com.raisedeel.foodappmanager.subscription.service.SubscriptionService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class SubscriptionController {
   @DeleteMapping("user/{userId}/restaurant/{restaurantId}")
   public ResponseEntity<HttpStatus> unsubscribeToRestaurantHandler(
       @PathVariable Long userId,
-      @PathVariable Long restaurantId
+      @Valid @PathVariable Long restaurantId
   ) {
     subscriptionService.unsubscribeToRestaurant(userId, restaurantId);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -44,7 +45,7 @@ public class SubscriptionController {
   public ResponseEntity<SubscriptionDto> updateRatingHandler(
       @PathVariable Long userId,
       @PathVariable Long restaurantId,
-      @RequestBody SubscriptionDto subscriptionDto
+      @Valid @RequestBody SubscriptionDto subscriptionDto
   ) {
     return new ResponseEntity<>(
         subscriptionService.updateRating(subscriptionDto, userId, restaurantId),

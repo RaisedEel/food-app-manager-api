@@ -16,6 +16,7 @@ public class Dish {
   private double price;
   private String category;
   private String description;
+  private String photoUlr;
 
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
