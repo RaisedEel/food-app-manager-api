@@ -1,7 +1,13 @@
 package com.raisedeel.foodappmanager.security;
 
+import com.raisedeel.foodappmanager.dish.model.Dish;
+import com.raisedeel.foodappmanager.dish.repository.DishRepository;
+import com.raisedeel.foodappmanager.restaurant.model.Restaurant;
+import com.raisedeel.foodappmanager.restaurant.repository.RestaurantRepository;
 import com.raisedeel.foodappmanager.security.providers.CustomAuthenticationProvider;
-import com.raisedeel.foodappmanager.security.validators.AuthenticationValidator;
+import com.raisedeel.foodappmanager.security.validators.AuthenticationChecker;
+import com.raisedeel.foodappmanager.user.model.User;
+import com.raisedeel.foodappmanager.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,10 +32,36 @@ public class SecurityConfig {
 
   private CustomAuthenticationProvider customAuthenticationProvider;
   private ExceptionHandlerEntry exceptionHandlerEntry;
-  private AuthenticationValidator authenticationValidator;
+
+  private UserRepository userRepository;
+  private RestaurantRepository restaurantRepository;
+  private DishRepository dishRepository;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+    AuthenticationChecker<User> userChecker = new AuthenticationChecker<>(userRepository) {
+      @Override
+      protected User convertEntityToUser(User entity) {
+        return entity;
+      }
+    };
+
+    AuthenticationChecker<Restaurant> restaurantChecker =
+        new AuthenticationChecker<>(restaurantRepository) {
+          @Override
+          protected User convertEntityToUser(Restaurant entity) {
+            return entity.getOwner();
+          }
+        };
+
+    AuthenticationChecker<Dish> dishChecker = new AuthenticationChecker<>(dishRepository) {
+      @Override
+      protected User convertEntityToUser(Dish entity) {
+        return entity.getRestaurant() != null ? entity.getRestaurant().getOwner() : null;
+      }
+    };
+
     http
         .csrf().disable()// CSRF disabled
         .authorizeHttpRequests()
@@ -38,19 +70,19 @@ public class SecurityConfig {
         .requestMatchers(HttpMethod.PUT, "/user/{id}").access(
             (authentication, context) ->
                 new AuthorizationDecision(
-                    authenticationValidator.checkUserId(authentication.get(), Long.valueOf(context.getVariables().get("id")))
+                    userChecker.check(authentication.get(), Long.valueOf(context.getVariables().get("id")), false)
                 )
         )
-        .requestMatchers(HttpMethod.PUT, "/restaurant/{id}", "/dish/restaurant/{id}").access(
+        .requestMatchers("/restaurant/{id}", "/dish/restaurant/{id}").access(
             (authentication, context) ->
                 new AuthorizationDecision(
-                    authenticationValidator.checkRestaurantOwner(authentication.get(), Long.valueOf(context.getVariables().get("id")))
+                    restaurantChecker.check(authentication.get(), Long.valueOf(context.getVariables().get("id")), true)
                 )
         )
-        .requestMatchers("dish/{id}").access(
+        .requestMatchers("/dish/{id}").access(
             (authentication, context) ->
                 new AuthorizationDecision(
-                    authenticationValidator.checkDishOwner(authentication.get(), Long.valueOf(context.getVariables().get("id")))
+                    dishChecker.check(authentication.get(), Long.valueOf(context.getVariables().get("id")), true)
                 )
         )
         .requestMatchers("/user/upgrade/**", "/user/demote/*", "/restaurant/remove/*").hasRole("ADMIN")
