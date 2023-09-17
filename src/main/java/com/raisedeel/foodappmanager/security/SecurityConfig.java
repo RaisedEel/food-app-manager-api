@@ -21,9 +21,27 @@ import org.springframework.security.web.SecurityFilterChain;
 import static com.raisedeel.foodappmanager.security.filters.FiltersConfigurer.filtersConfigurer;
 
 /**
- * Custom security configuration filter for the app. Will handle all the http requests by assigning what roles
- * will have access to which endpoint also adds custom validator logic to stop other users to access data which
+ * Contains the bean for a custom {@link SecurityFilterChain} for the app. This bean will handle all the http requests by assigning what roles
+ * or specific users will have access to which endpoint. <br/>
+ * Also adds custom validator logic using the {@link AuthenticationChecker} class to stop other users to access data which
  * doesn't belong to them.
+ * <p>
+ * This implementation in specific configures:
+ * <ul>
+ *   <li>Disables CSRF.</li>
+ *   <li>Enable authentication for all endpoints except GET and register endpoints.</li>
+ *   <li>Creates and assign {@link AuthenticationChecker}s in POST and PUT endpoints to restrict
+ *   users from manipulating others users data.</li>
+ *   <li>Adds a {@link CustomAuthenticationProvider} for the app.</li>
+ *   <li>Adds a {@link ExceptionHandlerEntry} for the app.</li>
+ *   <li>Adds custom authentication and authorization filters through the
+ *   {@link com.raisedeel.foodappmanager.security.filters.FiltersConfigurer}.</li>
+ *   <li>Sets the session creation policy to stateless meaning that the user will have to authenticate
+ *   again for each request.</li>
+ * </ul>
+ *
+ * @see SecurityFilterChain
+ * @see HttpSecurity
  */
 @AllArgsConstructor
 @Configuration
@@ -37,9 +55,20 @@ public class SecurityConfig {
   private RestaurantRepository restaurantRepository;
   private DishRepository dishRepository;
 
+  /**
+   * Builds a custom {@link SecurityFilterChain} for the app using a {@link HttpSecurity} object provided by the framework. <br/>
+   * Any request will have to pass through this chain which adds security checks to the different endpoints. <br/>
+   * Other configurations can be set like management session options or disabling csrf.
+   *
+   * @param http Builder to create a custom {@link SecurityFilterChain} that secures endpoints.
+   * @return A fully configured {@link SecurityFilterChain}.
+   * @throws Exception Any exceptions throw by the security checks. Can be handled by a
+   *                   {@link org.springframework.security.web.AuthenticationEntryPoint} added to the chain.
+   */
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+    // The next checkers where created to stop users from manipulating data from other users
     AuthenticationChecker<User> userChecker = new AuthenticationChecker<>(userRepository) {
       @Override
       protected User convertEntityToUser(User entity) {
