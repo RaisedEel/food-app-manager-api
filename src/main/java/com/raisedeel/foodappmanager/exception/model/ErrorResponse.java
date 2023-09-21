@@ -5,6 +5,10 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * Template class for a friendly JSON error response. It includes the error code, timestamp of when the
+ * error occurred  and a detailed error message.
+ */
 @Data
 public class ErrorResponse {
   private int errorCode;

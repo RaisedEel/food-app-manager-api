@@ -4,6 +4,7 @@ import com.raisedeel.foodappmanager.dish.model.Dish;
 import com.raisedeel.foodappmanager.dish.repository.DishRepository;
 import com.raisedeel.foodappmanager.restaurant.model.Restaurant;
 import com.raisedeel.foodappmanager.restaurant.repository.RestaurantRepository;
+import com.raisedeel.foodappmanager.security.filters.JwtFiltersConfigurer;
 import com.raisedeel.foodappmanager.security.providers.CustomAuthenticationProvider;
 import com.raisedeel.foodappmanager.security.validators.AuthenticationChecker;
 import com.raisedeel.foodappmanager.user.model.User;
@@ -18,30 +19,30 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static com.raisedeel.foodappmanager.security.filters.FiltersConfigurer.filtersConfigurer;
+import static com.raisedeel.foodappmanager.security.filters.JwtFiltersConfigurer.filtersConfigurer;
 
 /**
- * Contains the bean for a custom {@link SecurityFilterChain} for the app. This bean will handle all the http requests by assigning what roles
- * or specific users will have access to which endpoint. <br/>
- * Also adds custom validator logic using the {@link AuthenticationChecker} class to stop other users to access data which
+ * Contains the bean for a custom {@link SecurityFilterChain} for the app. This bean will handle all the http requests
+ * by assigning what roles or specific users will have access to which endpoint. <br/>
+ * Also adds custom validators logic using the {@link AuthenticationChecker} class to stop other users to access data which
  * doesn't belong to them.
  * <p>
  * This implementation in specific configures:
  * <ul>
  *   <li>Disables CSRF.</li>
- *   <li>Enable authentication for all endpoints except GET and register endpoints.</li>
+ *   <li>Enable authentication for all endpoints except the register and the GET endpoints.</li>
  *   <li>Creates and assign {@link AuthenticationChecker}s in POST and PUT endpoints to restrict
  *   users from manipulating others users data.</li>
  *   <li>Adds a {@link CustomAuthenticationProvider} for the app.</li>
  *   <li>Adds a {@link ExceptionHandlerEntry} for the app.</li>
- *   <li>Adds custom authentication and authorization filters through the
- *   {@link com.raisedeel.foodappmanager.security.filters.FiltersConfigurer}.</li>
+ *   <li>Adds custom authentication and authorization filters for JWT tokens through the {@link JwtFiltersConfigurer}.</li>
  *   <li>Sets the session creation policy to stateless meaning that the user will have to authenticate
  *   again for each request.</li>
  * </ul>
  *
  * @see SecurityFilterChain
  * @see HttpSecurity
+ * @see AuthenticationChecker
  */
 @AllArgsConstructor
 @Configuration
@@ -117,7 +118,7 @@ public class SecurityConfig {
         .requestMatchers("/user/upgrade/**", "/user/demote/*", "/restaurant/remove/*").hasRole("ADMIN")
         .anyRequest().authenticated() // Make all endpoint before this point ask for authentication
         .and()
-        .authenticationProvider(customAuthenticationProvider) // **IMPORTANT** This provider will handle JWT authentication
+        .authenticationProvider(customAuthenticationProvider) // This provider will handle JWT authentication
         .apply(filtersConfigurer()) //Adds the AuthenticationFilter and AuthorizationFilter to the chain
         .and()
         .exceptionHandling().authenticationEntryPoint(exceptionHandlerEntry) // Will handle all exceptions thrown by the filter

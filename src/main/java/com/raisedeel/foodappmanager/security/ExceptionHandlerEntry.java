@@ -12,8 +12,14 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import java.io.IOException;
 
 /**
- * Handles all the security exceptions for a custom ControllerAdvice. The ControllerAdvice implemented should
- * have a handler for the AuthenticationException in order to send back a custom response.
+ * An {@link AuthenticationEntryPoint} implementation that receives all the security exceptions thrown from the filter
+ * chain, resolve it using an implementation of {@link HandlerExceptionResolver} and delegate it for handling to an exception handler like a ControllerAdvice. <br/>
+ * The controller should have a handler for {@link AuthenticationException}s in order to send back a custom response
+ * to the client.
+ *
+ * @see AuthenticationEntryPoint
+ * @see HandlerExceptionResolver
+ * @see AuthenticationException
  */
 @Component
 @AllArgsConstructor

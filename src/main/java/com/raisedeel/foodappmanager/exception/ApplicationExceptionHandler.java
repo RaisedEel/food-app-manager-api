@@ -18,8 +18,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
- * Handles all the exceptions expected to be thrown by the app. Every handler will send back an
- * ErrorResponse with the error code and a reason for the error.
+ * An {@link ResponseEntityExceptionHandler} annotated with {@link ControllerAdvice}. Handles all the exceptions expected
+ * to be thrown by the controllers. <br/>
+ * Every handler can catch a specific type of exception and send back a custom
+ * {@link ErrorResponse} with the error code and the reason for the error.
  *
  * @see ErrorResponse
  */
@@ -27,11 +29,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
 
   /**
-   * Handles all AuthenticationExceptions resolved by the AuthenticationEntryPoint
-   * and caught by the ControllerAdvice (401).
+   * Handles all {@link AuthenticationException}s resolved by the {@link org.springframework.security.web.AuthenticationEntryPoint}
+   * and caught by the controller advice (401).
    *
-   * @param ex the AuthenticationException caught.
-   * @return a {@code ResponseEntity} with the status of unauthorized.
+   * @param ex the {@link AuthenticationException} caught.
+   * @return a {@link ResponseEntity} with the status of unauthorized.
    */
   @ExceptionHandler(AuthenticationException.class)
   public ResponseEntity<ErrorResponse> handleAuthenticationException(Exception ex) {
@@ -39,10 +41,10 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
   }
 
   /**
-   * Handles exceptions thrown when an entity wasn't found or by a delete operation.
+   * Handles exceptions thrown when an entity was not found or by a delete operation.
    *
-   * @param ex the Exception caught.
-   * @return a {@code ResponseEntity} with the status of not found (404).
+   * @param ex the {@link EntityNotFoundException} or {@link EmptyResultDataAccessException} caught.
+   * @return a {@link ResponseEntity} with the status of not found (404).
    */
   @ExceptionHandler({EntityNotFoundException.class, EmptyResultDataAccessException.class})
   public ResponseEntity<ErrorResponse> handleEntityNotFoundException(Exception ex) {
@@ -50,10 +52,10 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
   }
 
   /**
-   * Handles exceptions thrown when a constraint in a sql table is broken by an operation.
+   * Handles exceptions thrown when a constraint in a SQL table is broken by an operation.
    *
-   * @param ex the Exception caught.
-   * @return a {@code ResponseEntity} with the status of a bad request (400).
+   * @param ex the {@link DataIntegrityViolationException} caught.
+   * @return a {@link ResponseEntity} with the status of a bad request (400).
    */
   @ExceptionHandler(DataIntegrityViolationException.class)
   public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(Exception ex) {
@@ -63,11 +65,11 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
   }
 
   /**
-   * Handles any RuntimeException that haven't been handled by a past method and the custom
-   * exception InvalidOperationException thrown when the requirements for a operation haven't been fulfilled.
+   * Handles any {@link RuntimeException} that haven't been handled by a previous method and the custom
+   * exception {@link InvalidOperationException} thrown when the requirements for an operation haven't been fulfilled.
    *
-   * @param ex the Exception caught.
-   * @return a {@code ResponseEntity} with the status of a bad request (400).
+   * @param ex the {@link Exception} caught.
+   * @return a {@link  ResponseEntity} with the status of a bad request (400).
    */
   @ExceptionHandler({InvalidOperationException.class, RuntimeException.class})
   public ResponseEntity<ErrorResponse> handleRuntimeException(Exception ex) {
@@ -75,11 +77,11 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
   }
 
   /**
-   * Handles any other Exception that could be thrown by an unexpected error in the app.
+   * Handles any other {@link Exception} that could be thrown by an unexpected error in the controller.
    * **WARNING** Exceptions could still not be caught by this handler.
    *
-   * @param ex the Exception caught.
-   * @return a {@code ResponseEntity} with the status of a server error (500).
+   * @param ex the {@link Exception} caught.
+   * @return a {@link  ResponseEntity} with the status of a server error (500).
    */
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleUnexpectedException(Exception ex) {
@@ -89,9 +91,9 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
   }
 
   /**
-   * Handles exceptions thrown when the JSON fields of the request has invalid data.
+   * Handles exceptions thrown when the JSON fields of the request have invalid data.
    *
-   * @return a {@code ResponseEntity} with the status of bad request (400)
+   * @return a {@link ResponseEntity} with the status of bad request (400)
    * and the different messages errors of all the invalid fields.
    */
   @Override

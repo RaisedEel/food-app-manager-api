@@ -1,7 +1,7 @@
 package com.raisedeel.foodappmanager.security;
 
 /**
- * Simple JWT token settings class. Can change the secret key and expiration time for a valid token.
+ * Simple JWT token settings class. Can change the secret key and expiration time of a valid token.
  */
 public class SecurityConstants {
 
