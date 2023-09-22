@@ -3,6 +3,7 @@ package com.raisedeel.foodappmanager.security.filters;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 
 /**
  * An {@link AbstractHttpConfigurer} implementation that configures the {@link JwtAuthenticationFilter} and
@@ -47,6 +48,7 @@ public class JwtFiltersConfigurer extends AbstractHttpConfigurer<JwtFiltersConfi
     // Set the url that the filter will respond to
     jwtAuthenticationFilter.setFilterProcessesUrl("/user/authenticate");
     http.addFilter(jwtAuthenticationFilter);
-    http.addFilterAfter(new JwtAuthorizationFilter(), JwtAuthenticationFilter.class);
+    // The exception translator filter catch authentication exceptions thrown automatically
+    http.addFilterAfter(new JwtAuthorizationFilter(), ExceptionTranslationFilter.class);
   }
 }

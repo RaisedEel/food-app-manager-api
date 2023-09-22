@@ -2,24 +2,24 @@ package com.raisedeel.foodappmanager.security.filters;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.raisedeel.foodappmanager.exception.model.ErrorResponse;
 import com.raisedeel.foodappmanager.security.SecurityConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.http.MediaType;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -40,7 +40,7 @@ import java.util.List;
  *   authentication of the user for the current request.</li>
  * </ol>
  *
- * <em>Note</em>: This filter will catch any exception in this and any future filters in the chain.
+ * <em>Note</em>: This filter will catch any exception thrown in this and any future filters in the chain.
  *
  * @see OncePerRequestFilter
  * @see JwtAuthenticationFilter
@@ -54,14 +54,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
   /**
    * Validates incoming requests with an {@link JWT} token appended. If the token is valid, extract the user data to
    * create a new {@link Authentication} object and set it into the security context.
-   * If an exception is caught, an {@link ErrorResponse} object is sent back as JSON data with the error encountered.
+   * If an exception is caught, the exception will be rethrown to be handled by an AuthenticationEntryPoint or
+   * AccessDeniedHandler.
    *
    * @param request     the request received from past filters.
    * @param response    the response to be sent back once all the filters were executed.
    * @param filterChain a chain constituted from the next filters to be called.
    */
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, AuthenticationException, AccessDeniedException {
     String header = request.getHeader("Authorization");
 
     // If the request do not have an Authorization header or a bearer token then we skip the
@@ -99,18 +100,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
       SecurityContextHolder.getContext().setAuthentication(authentication);
       filterChain.doFilter(request, response);
 
+    } catch (JWTVerificationException ex) {
+      // Thrown if the token is invalid
+      throw new InsufficientAuthenticationException("The user JWT Token is invalid. Please authenticate again", ex);
+    } catch (AccessDeniedException ex) {
+      // Thrown if the user can't have access to the resource
+      throw new AccessDeniedException("User does not have the required credentials to manipulate this resource", ex);
     } catch (Exception ex) {
-      // Handling of JWT token exclusive errors, stops these errors from appearing in console and instead
-      // sends back an ErrorResponse
-      ErrorResponse errorResponse = new ErrorResponse(403, "User could not be authorized");
-      response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-      response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-
-      OutputStream responseStream = response.getOutputStream();
-      // Write with an object mapper the ErrorResponse object on the stream
-      ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
-      mapper.writeValue(responseStream, errorResponse);
-      responseStream.flush();
+      // In case the next filters in the chain throw an unexpected exception. This will allow debugging
+      throw new InsufficientAuthenticationException("An unexpected error occurred while authenticating: " + ex.getMessage(), ex);
     }
 
   }

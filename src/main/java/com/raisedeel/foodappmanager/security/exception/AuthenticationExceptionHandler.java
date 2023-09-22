@@ -1,4 +1,4 @@
-package com.raisedeel.foodappmanager.security;
+package com.raisedeel.foodappmanager.security.exception;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,8 +12,9 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import java.io.IOException;
 
 /**
- * An {@link AuthenticationEntryPoint} implementation that receives all the security exceptions thrown from the filter
- * chain, resolve it using an implementation of {@link HandlerExceptionResolver} and delegate it for handling to an exception handler like a ControllerAdvice. <br/>
+ * An {@link AuthenticationEntryPoint} implementation that receives all the authentication exceptions thrown from the filter
+ * chain. This implementation handles the exception using an implementation of {@link HandlerExceptionResolver} to delegate it to an
+ * exception handler method in a ControllerAdvice. <br/>
  * The controller should have a handler for {@link AuthenticationException}s in order to send back a custom response
  * to the client.
  *
@@ -23,7 +24,7 @@ import java.io.IOException;
  */
 @Component
 @AllArgsConstructor
-public class ExceptionHandlerEntry implements AuthenticationEntryPoint {
+public class AuthenticationExceptionHandler implements AuthenticationEntryPoint {
 
   private HandlerExceptionResolver handlerExceptionResolver;
 

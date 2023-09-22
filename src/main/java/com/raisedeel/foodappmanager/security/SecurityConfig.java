@@ -4,6 +4,8 @@ import com.raisedeel.foodappmanager.dish.model.Dish;
 import com.raisedeel.foodappmanager.dish.repository.DishRepository;
 import com.raisedeel.foodappmanager.restaurant.model.Restaurant;
 import com.raisedeel.foodappmanager.restaurant.repository.RestaurantRepository;
+import com.raisedeel.foodappmanager.security.exception.AccessDeniedExceptionHandler;
+import com.raisedeel.foodappmanager.security.exception.AuthenticationExceptionHandler;
 import com.raisedeel.foodappmanager.security.filters.JwtFiltersConfigurer;
 import com.raisedeel.foodappmanager.security.providers.CustomAuthenticationProvider;
 import com.raisedeel.foodappmanager.security.validators.AuthenticationChecker;
@@ -34,7 +36,8 @@ import static com.raisedeel.foodappmanager.security.filters.JwtFiltersConfigurer
  *   <li>Creates and assign {@link AuthenticationChecker}s in POST and PUT endpoints to restrict
  *   users from manipulating others users data.</li>
  *   <li>Adds a {@link CustomAuthenticationProvider} for the app.</li>
- *   <li>Adds a {@link ExceptionHandlerEntry} for the app.</li>
+ *   <li>Adds a {@link AuthenticationExceptionHandler} for the app.</li>
+ *   <li>Adds a {@link AccessDeniedExceptionHandler} for the app.</li>
  *   <li>Adds custom authentication and authorization filters for JWT tokens through the {@link JwtFiltersConfigurer}.</li>
  *   <li>Sets the session creation policy to stateless meaning that the user will have to authenticate
  *   again for each request.</li>
@@ -50,7 +53,8 @@ import static com.raisedeel.foodappmanager.security.filters.JwtFiltersConfigurer
 public class SecurityConfig {
 
   private CustomAuthenticationProvider customAuthenticationProvider;
-  private ExceptionHandlerEntry exceptionHandlerEntry;
+  private AuthenticationExceptionHandler authenticationExceptionHandler;
+  private AccessDeniedExceptionHandler accessDeniedHandler;
 
   private UserRepository userRepository;
   private RestaurantRepository restaurantRepository;
@@ -63,8 +67,6 @@ public class SecurityConfig {
    *
    * @param http Builder to create a custom {@link SecurityFilterChain} that secures endpoints.
    * @return A fully configured {@link SecurityFilterChain}.
-   * @throws Exception Any exceptions throw by the security checks. Can be handled by a
-   *                   {@link org.springframework.security.web.AuthenticationEntryPoint} added to the chain.
    */
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -121,7 +123,9 @@ public class SecurityConfig {
         .authenticationProvider(customAuthenticationProvider) // This provider will handle JWT authentication
         .apply(filtersConfigurer()) //Adds the AuthenticationFilter and AuthorizationFilter to the chain
         .and()
-        .exceptionHandling().authenticationEntryPoint(exceptionHandlerEntry) // Will handle all exceptions thrown by the filter
+        .exceptionHandling()
+        .authenticationEntryPoint(authenticationExceptionHandler) // Will handle primarily authentication exceptions thrown by any filter
+        .accessDeniedHandler(accessDeniedHandler) // Will handle access denied exceptions thrown by authorization filters
         .and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //Any Restful api needs to be stateless
 

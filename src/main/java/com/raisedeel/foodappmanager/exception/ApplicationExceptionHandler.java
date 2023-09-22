@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -38,6 +39,18 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
   @ExceptionHandler(AuthenticationException.class)
   public ResponseEntity<ErrorResponse> handleAuthenticationException(Exception ex) {
     return new ResponseEntity<>(new ErrorResponse(401, ex.getMessage()), HttpStatus.UNAUTHORIZED);
+  }
+
+  /**
+   * Handles all {@link AccessDeniedException}s resolved by the {@link org.springframework.security.web.access.AccessDeniedHandler}
+   * and caught by the controller advice (403).
+   *
+   * @param ex the {@link AccessDeniedException} caught.
+   * @return a {@link ResponseEntity} with the status of forbidden.
+   */
+  @ExceptionHandler(AccessDeniedException.class)
+  public ResponseEntity<ErrorResponse> handleAccessDeniedException(Exception ex) {
+    return new ResponseEntity<>(new ErrorResponse(403, ex.getMessage()), HttpStatus.FORBIDDEN);
   }
 
   /**
