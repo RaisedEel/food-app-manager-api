@@ -1,8 +1,11 @@
 package com.raisedeel.foodappmanager.restaurant.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raisedeel.foodappmanager.dish.dto.DishDto;
 import com.raisedeel.foodappmanager.subscription.dto.SubscriptionDto;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -37,9 +40,8 @@ public class RestaurantDto {
   @NotBlank(message = "Restaurant address cannot be blank")
   private String address;
 
-  @Max(value = 5, message = "Rating cannot be higher thant 5 stars")
-  @Min(value = 0, message = "Rating cannot be lower thant 0 stars")
-  private BigDecimal rating = new BigDecimal(0);
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  private BigDecimal rating;
 
   private String photoUrl = "";
   private Set<DishDto> menu;

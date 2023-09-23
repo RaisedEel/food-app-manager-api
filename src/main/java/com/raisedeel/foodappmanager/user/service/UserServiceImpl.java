@@ -4,6 +4,8 @@ import com.raisedeel.foodappmanager.exception.exceptions.EntityNotFoundException
 import com.raisedeel.foodappmanager.exception.exceptions.InvalidOperationException;
 import com.raisedeel.foodappmanager.restaurant.model.Restaurant;
 import com.raisedeel.foodappmanager.restaurant.repository.RestaurantRepository;
+import com.raisedeel.foodappmanager.subscription.model.Subscription;
+import com.raisedeel.foodappmanager.subscription.repository.SubscriptionRepository;
 import com.raisedeel.foodappmanager.user.dto.UserDto;
 import com.raisedeel.foodappmanager.user.dto.UserMapper;
 import com.raisedeel.foodappmanager.user.model.Role;
@@ -24,6 +26,8 @@ public class UserServiceImpl implements UserService {
   UserRepository userRepository;
   OwnerRepository ownerRepository;
   RestaurantRepository restaurantRepository;
+  SubscriptionRepository subscriptionRepository;
+
   PasswordEncoder passwordEncoder;
   UserMapper userMapper;
 
@@ -80,7 +84,12 @@ public class UserServiceImpl implements UserService {
     );
 
     userRepository.delete(user);
-    userRepository.save(userOwner);
+    User savedOwner = userRepository.save(userOwner);
+
+    for (Subscription subscription : user.getSubscriptions()) {
+      subscription.setUser(savedOwner);
+      subscriptionRepository.save(subscription);
+    }
   }
 
   @Override
@@ -99,7 +108,12 @@ public class UserServiceImpl implements UserService {
     );
 
     ownerRepository.delete(owner);
-    userRepository.save(demotedUser);
+    User savedUser = userRepository.save(demotedUser);
+
+    for (Subscription subscription : owner.getSubscriptions()) {
+      subscription.setUser(savedUser);
+      subscriptionRepository.save(subscription);
+    }
   }
 
   private User getUserById(Long id) {
