@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -32,8 +31,10 @@ public class Restaurant {
   private UserOwner owner;
 
   @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
-  private Set<Dish> menu;
+  private List<Dish> menu;
 
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
   private List<Subscription> subscriptions;
 

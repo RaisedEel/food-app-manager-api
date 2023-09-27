@@ -12,6 +12,8 @@ import com.raisedeel.foodappmanager.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class SubscriptionServiceImpl implements SubscriptionService {
@@ -27,6 +29,23 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         getSubscriptionByUserIdAndRestaurantId(userId, restaurantId)
     );
   }
+
+  @Override
+  public List<SubscriptionDto> retrieveSubscriptionsFromUser(Long userId) {
+    return subscriptionRepository.findAllByUserId(userId)
+        .stream()
+        .map(subscriptionMapper::subscriptionToDto)
+        .toList();
+  }
+
+  @Override
+  public List<SubscriptionDto> retrieveSubscriptionsFromRestaurants(Long restaurantId) {
+    return subscriptionRepository.findAllByRestaurantId(restaurantId)
+        .stream()
+        .map(subscriptionMapper::subscriptionToDto)
+        .toList();
+  }
+
 
   @Override
   public SubscriptionDto subscribeToRestaurant(Long userId, Long restaurantId) {

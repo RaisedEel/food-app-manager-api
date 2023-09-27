@@ -6,10 +6,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface SubscriptionRepository extends CrudRepository<Subscription, Long> {
   Optional<Subscription> findByUserIdAndRestaurantId(Long userId, Long restaurantId);
+
+  List<Subscription> findAllByUserId(Long userId);
+
+  List<Subscription> findAllByRestaurantId(Long restaurantId);
 
   @Transactional
   @Modifying

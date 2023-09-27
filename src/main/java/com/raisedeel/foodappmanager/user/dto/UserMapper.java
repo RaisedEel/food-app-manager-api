@@ -1,7 +1,6 @@
 package com.raisedeel.foodappmanager.user.dto;
 
 import com.raisedeel.foodappmanager.restaurant.dto.RestaurantMapper;
-import com.raisedeel.foodappmanager.subscription.dto.SubscriptionMapper;
 import com.raisedeel.foodappmanager.user.model.User;
 import com.raisedeel.foodappmanager.user.model.UserOwner;
 import org.mapstruct.*;
@@ -9,7 +8,7 @@ import org.mapstruct.*;
 @Mapper(
     componentModel = "spring",
     injectionStrategy = InjectionStrategy.CONSTRUCTOR,
-    uses = {RestaurantMapper.class, SubscriptionMapper.class}
+    uses = RestaurantMapper.class
 )
 public interface UserMapper {
   UserDto userToDto(User user);

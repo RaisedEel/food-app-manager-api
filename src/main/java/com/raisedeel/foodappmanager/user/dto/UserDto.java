@@ -3,15 +3,12 @@ package com.raisedeel.foodappmanager.user.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raisedeel.foodappmanager.restaurant.dto.RestaurantDto;
-import com.raisedeel.foodappmanager.subscription.dto.SubscriptionDto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -36,5 +33,4 @@ public class UserDto {
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private RestaurantDto restaurantOwned;
-  private List<SubscriptionDto> subscriptions;
 }

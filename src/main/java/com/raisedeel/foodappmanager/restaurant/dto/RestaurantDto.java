@@ -2,7 +2,6 @@ package com.raisedeel.foodappmanager.restaurant.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raisedeel.foodappmanager.dish.dto.DishDto;
-import com.raisedeel.foodappmanager.subscription.dto.SubscriptionDto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -44,6 +42,5 @@ public class RestaurantDto {
   private BigDecimal rating;
 
   private String photoUrl = "";
-  private Set<DishDto> menu;
-  private List<SubscriptionDto> subscriptions;
+  private List<DishDto> menu;
 }

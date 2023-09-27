@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/subscription")
@@ -20,6 +22,18 @@ public class SubscriptionController {
       @PathVariable Long userId,
       @PathVariable Long restaurantId) {
     return new ResponseEntity<>(subscriptionService.retrieveSubscription(userId, restaurantId), HttpStatus.OK);
+  }
+
+  @GetMapping("/user/{userId}")
+  public ResponseEntity<List<SubscriptionDto>> retrieveSubscriptionsFromUserHandler(
+      @PathVariable Long userId) {
+    return new ResponseEntity<>(subscriptionService.retrieveSubscriptionsFromUser(userId), HttpStatus.OK);
+  }
+
+  @GetMapping("/restaurant/{restaurantId}")
+  public ResponseEntity<List<SubscriptionDto>> retrieveSubscriptionsFromRestaurantHandler(
+      @PathVariable Long restaurantId) {
+    return new ResponseEntity<>(subscriptionService.retrieveSubscriptionsFromRestaurants(restaurantId), HttpStatus.OK);
   }
 
   @PostMapping("/user/{userId}/restaurant/{restaurantId}")

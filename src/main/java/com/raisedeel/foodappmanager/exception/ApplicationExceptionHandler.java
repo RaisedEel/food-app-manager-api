@@ -73,7 +73,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
   @ExceptionHandler(DataIntegrityViolationException.class)
   public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(Exception ex) {
     return new ResponseEntity<>(
-        new ErrorResponse(400, "Error found while updating the database: " + ex.getMessage()),
+        new ErrorResponse(400, "The operation was cancelled due to key duplication. Some of the data's fields to be inserted can only be inserted once on the database"),
         HttpStatus.BAD_REQUEST);
   }
 
