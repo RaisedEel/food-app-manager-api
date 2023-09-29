@@ -1,5 +1,6 @@
 package com.raisedeel.foodappmanager.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.raisedeel.foodappmanager.subscription.model.Subscription;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,31 +34,37 @@ public class User implements UserDetails {
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   private List<Subscription> subscriptions;
 
+  @JsonIgnore
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(role.toString()));
   }
 
+  @JsonIgnore
   @Override
   public String getUsername() {
     return this.email;
   }
 
+  @JsonIgnore
   @Override
   public boolean isAccountNonExpired() {
     return true;
   }
 
+  @JsonIgnore
   @Override
   public boolean isAccountNonLocked() {
     return true;
   }
 
+  @JsonIgnore
   @Override
   public boolean isCredentialsNonExpired() {
     return true;
   }
 
+  @JsonIgnore
   @Override
   public boolean isEnabled() {
     return true;
