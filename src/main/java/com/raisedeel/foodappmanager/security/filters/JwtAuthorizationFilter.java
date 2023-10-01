@@ -1,10 +1,8 @@
 package com.raisedeel.foodappmanager.security.filters;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.raisedeel.foodappmanager.security.SecurityConstants;
+import com.raisedeel.foodappmanager.security.JwtTokenUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +12,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -33,7 +30,7 @@ import java.util.List;
  *   <li>The method {@link #doFilter} will be called automatically by the framework for each request.</li>
  *   <li>Will check if the request contains a header "Authorization" and that it contains a bearer token. If the check
  *   fails it skips the filter execution.</li>
- *   <li>Next, the token will be extracted from the bearer and will be decoded to extract the username and role.</li>
+ *   <li>Next, the token will be extracted from the header and will be decoded to extract the username and role.</li>
  *   <li>If the decoding succeeds the extracted data will be converted into an {@link Authentication} object, otherwise
  *   an exception will be thrown.</li>
  *   <li>Finally the authentication will be set in the {@link SecurityContextHolder} context. This will complete the
@@ -62,33 +59,23 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
    * @param filterChain a chain constituted from the next filters to be called.
    */
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, AuthenticationException, AccessDeniedException {
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
     String header = request.getHeader("Authorization");
 
     // If the request do not have an Authorization header or a bearer token then we skip the
     // execution of the filter
-    if (header == null || !header.startsWith(SecurityConstants.BEARER)) {
+    if (header == null || !header.startsWith(JwtTokenUtil.BEARER)) {
       filterChain.doFilter(request, response);
       return;
     }
 
-    // Replaces the bearer string that appears at the start of any jwt token
-    String jwtToken = header.replace(SecurityConstants.BEARER, "");
-
     try {
-      // Decodes the jwt token using the secret key. Also verifies that the token corresponds to the key,
-      // making it a valid token, otherwise throws an JWTVerificationException
-      DecodedJWT validJwt = JWT.require(Algorithm.HMAC512(SecurityConstants.SECRET_KEY))
-          .build()
-          .verify(jwtToken);
-
-      String username = validJwt.getSubject();
+      // Extract the username (email) from the jwt token using the secret key. Also verifies that the token corresponds
+      // to the key, making it a valid token, otherwise throws an JWTVerificationException
+      String username = JwtTokenUtil.getSubjectFromToken(header);
       // The claim role contains the role of the user, this will become its authority when creating
       // the user token
-      String userRole = validJwt.getClaim("role")
-          .asString()
-          .replace("[", "")
-          .replace("]", "");
+      String userRole = JwtTokenUtil.getRoleFromToken(header);
 
       // The new UsernamePasswordAuthenticationToken that will hold the username and the role for the context
       Authentication authentication = new UsernamePasswordAuthenticationToken(

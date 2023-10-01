@@ -1,11 +1,10 @@
 package com.raisedeel.foodappmanager.security.filters;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.raisedeel.foodappmanager.exception.exceptions.InvalidAuthenticationFieldsException;
 import com.raisedeel.foodappmanager.exception.model.ErrorResponse;
-import com.raisedeel.foodappmanager.security.SecurityConstants;
+import com.raisedeel.foodappmanager.security.JwtTokenUtil;
 import com.raisedeel.foodappmanager.user.model.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,7 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Date;
 
 /**
  * A filter that extends the {@link UsernamePasswordAuthenticationFilter} to handle authentication through {@link JWT} tokens. <br/>
@@ -79,7 +77,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   /**
    * Creates a {@link JWT} token if the authentication attempt was successful and adds it to the header "Authorization"
    * in the response.
-   * The configurations for the token can be set in {@link SecurityConstants} or brand new could be added.
+   * The configurations for the token can be set in {@link JwtTokenUtil}.
    *
    * @param request  the request received from past filters.
    * @param response the response to be sent back once all the filters were executed.
@@ -88,13 +86,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   @Override
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
     // Creates a new JWT token for the client with a duration of 2 hours and the role specified on the validated Authentication
-    String jwtToken = JWT.create()
-        .withSubject(authResult.getName())
-        .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstants.TOKEN_EXPIRATION))
-        .withClaim("role", authResult.getAuthorities().toString())
-        .sign(Algorithm.HMAC512(SecurityConstants.SECRET_KEY));
+    // The role is obtained from a list of roles, but in the current app, the list will always contain 1 role
+    String jwtToken = JwtTokenUtil.createToken(
+        authResult.getName(),
+        authResult.getAuthorities().iterator().next().toString()
+    );
 
-    response.addHeader("Authorization", SecurityConstants.BEARER + jwtToken);
+    response.addHeader("Authorization", jwtToken);
   }
 
   /**
