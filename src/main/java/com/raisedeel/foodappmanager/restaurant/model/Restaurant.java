@@ -1,5 +1,6 @@
 package com.raisedeel.foodappmanager.restaurant.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.raisedeel.foodappmanager.dish.model.Dish;
 import com.raisedeel.foodappmanager.subscription.model.Subscription;
 import com.raisedeel.foodappmanager.user.model.UserOwner;
@@ -38,6 +39,7 @@ public class Restaurant {
   @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
   private List<Subscription> subscriptions;
 
+  @JsonIgnore
   public int getTotalOfRatings() {
     return (int) getSubscriptions().stream()
         .filter((sub) -> sub.getRating() > 0)

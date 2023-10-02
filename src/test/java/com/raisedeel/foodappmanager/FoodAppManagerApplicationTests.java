@@ -1,5 +1,6 @@
 package com.raisedeel.foodappmanager;
 
+import com.raisedeel.foodappmanager.restaurant.model.Restaurant;
 import com.raisedeel.foodappmanager.security.JwtTokenUtil;
 import com.raisedeel.foodappmanager.user.model.Role;
 import com.raisedeel.foodappmanager.user.model.User;
@@ -27,15 +28,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Suite
 @DisplayName("Application tests setup")
-@SelectClasses({UserIntegrationTests.class})
+@SelectClasses({UserIntegrationTests.class, RestaurantIntegrationTests.class})
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FoodAppManagerApplicationTests {
 
-  static List<User> users;
-
   static PasswordEncoder passwordEncoder;
+
+  static List<User> users;
+  static Restaurant restaurant = new Restaurant(
+      null,
+      "Restaurant 1",
+      "Bar",
+      "Normal Bar",
+      "res@gmail.com",
+      "7551234567",
+      "Some place",
+      0,
+      "url",
+      null,
+      null,
+      null);
 
   static {
     passwordEncoder = new BCryptPasswordEncoder();
@@ -43,12 +57,13 @@ class FoodAppManagerApplicationTests {
     users = Arrays.asList(
         new User(2L, "Angel", "angel@gmail.com", passwordEncoder.encode("11111"), "Some place", Role.ROLE_CLIENT, null),
         new User(3L, "Carlos", "carlos@gmail.com", passwordEncoder.encode("22222"), "Some place", Role.ROLE_CLIENT, null),
-        new User(4L, "Omar", "omar@gmail.com", passwordEncoder.encode("33333"), "Some place", Role.ROLE_CLIENT, null)
+        new User(4L, "Omar", "omar@gmail.com", passwordEncoder.encode("33333"), "Some place", Role.ROLE_OWNER, null)
     );
   }
 
   @Autowired
   UserRepository userRepository;
+
   @Autowired
   MockMvc mockMvc;
 
