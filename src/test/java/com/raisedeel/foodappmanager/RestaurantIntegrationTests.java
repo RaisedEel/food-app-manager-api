@@ -46,10 +46,10 @@ public class RestaurantIntegrationTests {
   }
 
   @Test
-  @DisplayName("Check if a normal user cannot promote other users")
+  @DisplayName("Check if a normal user can't promote other users")
   @Order(2)
   public void deniedPromotionToOwnerTest() throws Exception {
-    RequestBuilder request = MockMvcRequestBuilders.put("/user/upgrade/3/restaurant/1")
+    RequestBuilder request = MockMvcRequestBuilders.put("/user/upgrade/4/restaurant/1")
         .header("Authorization", JwtTokenUtil.createToken(users.get(0).getEmail(), users.get(0).getRole().toString()));
 
     mockMvc.perform(request)
@@ -58,8 +58,20 @@ public class RestaurantIntegrationTests {
   }
 
   @Test
-  @DisplayName("Check if admin can promote an user")
+  @DisplayName("Check if admin can promote an owner user")
   @Order(3)
+  public void invalidPromotionFromOwnerToOwnerTest() throws Exception {
+    RequestBuilder request = MockMvcRequestBuilders.put("/user/upgrade/3/restaurant/1")
+        .header("Authorization", JwtTokenUtil.createToken("admin", Role.ROLE_ADMIN.toString()));
+
+    mockMvc.perform(request)
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("errorCode").value(400));
+  }
+
+  @Test
+  @DisplayName("Check if admin can promote a normal user to an owner-less restaurant")
+  @Order(4)
   public void successfulPromotionToOwnerTest() throws Exception {
     RequestBuilder request = MockMvcRequestBuilders.put("/user/upgrade/2/restaurant/1")
         .header("Authorization", JwtTokenUtil.createToken("admin", Role.ROLE_ADMIN.toString()));
@@ -70,8 +82,20 @@ public class RestaurantIntegrationTests {
   }
 
   @Test
+  @DisplayName("Check if admin can promote a normal user to an owned restaurant")
+  @Order(5)
+  public void invalidPromotionToOwnerWithRestaurantOwnedTest() throws Exception {
+    RequestBuilder request = MockMvcRequestBuilders.put("/user/upgrade/4/restaurant/1")
+        .header("Authorization", JwtTokenUtil.createToken("admin", Role.ROLE_ADMIN.toString()));
+
+    mockMvc.perform(request)
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("errorCode").value(400));
+  }
+
+  @Test
   @DisplayName("Check for the creation of the new owner")
-  @Order(4)
+  @Order(6)
   public void successfulGetAllOwnersTest() throws Exception {
     RequestBuilder request = MockMvcRequestBuilders.get("/user/owners")
         .header("Authorization", JwtTokenUtil.createToken(users.get(0).getEmail(), users.get(0).getRole().toString()));
@@ -84,10 +108,10 @@ public class RestaurantIntegrationTests {
 
   @Test
   @DisplayName("Check if non owners can't manipulate the restaurant")
-  @Order(5)
+  @Order(7)
   public void forbiddenPutIntoRestaurantFromNonOwnerTest() throws Exception {
     RequestBuilder request = MockMvcRequestBuilders.put("/restaurant/1")
-        .header("Authorization", JwtTokenUtil.createToken(users.get(2).getEmail(), users.get(2).getRole().toString()))
+        .header("Authorization", JwtTokenUtil.createToken(users.get(1).getEmail(), users.get(1).getRole().toString()))
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(restaurant));
 
@@ -98,7 +122,7 @@ public class RestaurantIntegrationTests {
 
   @Test
   @DisplayName("Check if the owner can manipulate the restaurant")
-  @Order(6)
+  @Order(8)
   public void successfulPutIntoRestaurantFromOwnerTest() throws Exception {
     RequestBuilder request = MockMvcRequestBuilders.put("/restaurant/1")
         .header("Authorization", JwtTokenUtil.createToken(users.get(0).getEmail(), users.get(0).getRole().toString()))

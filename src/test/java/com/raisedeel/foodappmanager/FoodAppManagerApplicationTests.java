@@ -56,8 +56,8 @@ class FoodAppManagerApplicationTests {
 
     users = Arrays.asList(
         new User(2L, "Angel", "angel@gmail.com", passwordEncoder.encode("11111"), "Some place", Role.ROLE_CLIENT, null),
-        new User(3L, "Carlos", "carlos@gmail.com", passwordEncoder.encode("22222"), "Some place", Role.ROLE_CLIENT, null),
-        new User(4L, "Omar", "omar@gmail.com", passwordEncoder.encode("33333"), "Some place", Role.ROLE_OWNER, null)
+        new User(3L, "Carlos", "carlos@gmail.com", passwordEncoder.encode("22222"), "Some place", Role.ROLE_OWNER, null),
+        new User(4L, "Omar", "omar@gmail.com", passwordEncoder.encode("33333"), "Some place", Role.ROLE_CLIENT, null)
     );
   }
 

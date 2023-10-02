@@ -67,6 +67,19 @@ public class UserIntegrationTests {
   }
 
   @Test
+  @DisplayName("Check if registration of user working correctly")
+  public void successfulRegistrationOfUser() throws Exception {
+    RequestBuilder request = MockMvcRequestBuilders.post("/user/register")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(users.get(2)));
+
+    mockMvc.perform(request)
+        .andExpect(status().is2xxSuccessful())
+        .andExpect(jsonPath("$.name").value(users.get(2).getName()))
+        .andExpect(jsonPath("$.address").value(users.get(2).getAddress()));
+  }
+
+  @Test
   @DisplayName("Check if the manipulation of data from the user that owns the data is successful")
   public void successfulPutFromAuthorizedUserTest() throws Exception {
     String address = "Someplace that is not here";
@@ -101,5 +114,5 @@ public class UserIntegrationTests {
         .andExpect(status().isForbidden())
         .andExpect(jsonPath("$.errorCode").value(403));
   }
-  
+
 }

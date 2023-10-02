@@ -40,7 +40,7 @@ public class DishIntegrationTests {
   @Order(1)
   public void deniedCreationOfDishTest() throws Exception {
     RequestBuilder request = MockMvcRequestBuilders.post("/dish/restaurant/1")
-        .header("Authorization", JwtTokenUtil.createToken(users.get(2).getEmail(), users.get(2).getRole().toString()))
+        .header("Authorization", JwtTokenUtil.createToken(users.get(1).getEmail(), users.get(1).getRole().toString()))
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(dishes.get(0)));
 
@@ -84,7 +84,7 @@ public class DishIntegrationTests {
   @Order(4)
   public void deniedPutOfDishByNonOwnerTest() throws Exception {
     RequestBuilder request = MockMvcRequestBuilders.put("/dish/2")
-        .header("Authorization", JwtTokenUtil.createToken(users.get(2).getEmail(), users.get(2).getRole().toString()))
+        .header("Authorization", JwtTokenUtil.createToken(users.get(1).getEmail(), users.get(1).getRole().toString()))
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(dishes.get(1)));
 
@@ -123,7 +123,7 @@ public class DishIntegrationTests {
   @Order(6)
   public void deniedDeleteOfDishByNonOwnerTest() throws Exception {
     RequestBuilder request = MockMvcRequestBuilders.delete("/dish/2")
-        .header("Authorization", JwtTokenUtil.createToken(users.get(2).getEmail(), users.get(2).getRole().toString()));
+        .header("Authorization", JwtTokenUtil.createToken(users.get(1).getEmail(), users.get(1).getRole().toString()));
 
     mockMvc.perform(request)
         .andExpect(status().isForbidden())
