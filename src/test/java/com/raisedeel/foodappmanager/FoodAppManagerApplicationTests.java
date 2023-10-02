@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Suite
 @DisplayName("Application tests setup")
-@SelectClasses({UserIntegrationTests.class, RestaurantIntegrationTests.class})
+@SelectClasses({UserIntegrationTests.class, RestaurantIntegrationTests.class, DishIntegrationTests.class})
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

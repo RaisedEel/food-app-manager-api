@@ -40,7 +40,9 @@ public class RestaurantIntegrationTests {
         .content(objectMapper.writeValueAsString(restaurant));
 
     mockMvc.perform(request)
-        .andExpect(status().is2xxSuccessful());
+        .andExpect(status().is2xxSuccessful())
+        .andExpect(jsonPath("$.name").value(restaurant.getName()))
+        .andExpect(jsonPath("$.description").value(restaurant.getDescription()));
   }
 
   @Test
@@ -51,7 +53,8 @@ public class RestaurantIntegrationTests {
         .header("Authorization", JwtTokenUtil.createToken(users.get(0).getEmail(), users.get(0).getRole().toString()));
 
     mockMvc.perform(request)
-        .andExpect(status().isForbidden());
+        .andExpect(status().isForbidden())
+        .andExpect(jsonPath("$.errorCode").value(403));
   }
 
   @Test
@@ -80,7 +83,7 @@ public class RestaurantIntegrationTests {
   }
 
   @Test
-  @DisplayName("Check if non owners can manipulate the restaurant")
+  @DisplayName("Check if non owners can't manipulate the restaurant")
   @Order(5)
   public void forbiddenPutIntoRestaurantFromNonOwnerTest() throws Exception {
     RequestBuilder request = MockMvcRequestBuilders.put("/restaurant/1")
