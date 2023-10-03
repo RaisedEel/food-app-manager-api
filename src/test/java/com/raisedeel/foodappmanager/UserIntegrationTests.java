@@ -68,7 +68,7 @@ public class UserIntegrationTests {
 
   @Test
   @DisplayName("Check if registration of user working correctly")
-  public void successfulRegistrationOfUser() throws Exception {
+  public void successfulRegistrationOfUserTest() throws Exception {
     RequestBuilder request = MockMvcRequestBuilders.post("/user/register")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(users.get(2)));
