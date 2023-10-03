@@ -1,4 +1,4 @@
-package com.raisedeel.foodappmanager;
+package com.raisedeel.foodappmanager.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.raisedeel.foodappmanager.dish.model.Dish;

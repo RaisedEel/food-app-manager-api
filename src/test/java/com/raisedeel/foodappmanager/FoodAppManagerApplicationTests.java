@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.platform.suite.api.SelectClasses;
+import org.junit.platform.suite.api.SelectPackages;
 import org.junit.platform.suite.api.Suite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -28,16 +28,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Suite
 @DisplayName("Application tests setup")
-@SelectClasses({UserIntegrationTests.class, RestaurantIntegrationTests.class, DishIntegrationTests.class, DeletionIntegrationTests.class})
+@SelectPackages("com.raisedeel.foodappmanager.integration")
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class FoodAppManagerApplicationTests {
+public class FoodAppManagerApplicationTests {
 
-  static PasswordEncoder passwordEncoder;
-
-  static List<User> users;
-  static Restaurant restaurant = new Restaurant(
+  public static List<User> users;
+  public static Restaurant restaurant = new Restaurant(
       null,
       "Restaurant 1",
       "Bar",
@@ -51,9 +49,9 @@ class FoodAppManagerApplicationTests {
       null,
       null);
 
-  static {
-    passwordEncoder = new BCryptPasswordEncoder();
+  static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+  static {
     users = Arrays.asList(
         new User(2L, "Angel", "angel@gmail.com", passwordEncoder.encode("11111"), "Some place", Role.ROLE_CLIENT, null),
         new User(3L, "Carlos", "carlos@gmail.com", passwordEncoder.encode("22222"), "Some place", Role.ROLE_OWNER, null),
