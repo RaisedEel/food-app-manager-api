@@ -70,17 +70,13 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     Restaurant restaurant = getRestaurantById(restaurantId);
     Subscription subscription = getSubscriptionByUserIdAndRestaurantId(userId, restaurantId);
 
-    restaurant.setRating(calculateRating(
-        subscription.getRating(),
-        subscriptionDto.getRating(),
-        restaurant.getTotalOfRatings(),
-        restaurant.getRating()
-    ));
-
-    restaurantRepository.save(restaurant);
-    return subscriptionMapper.subscriptionToDto(subscriptionRepository.save(
+    SubscriptionDto updatedDto = subscriptionMapper.subscriptionToDto(subscriptionRepository.save(
         subscriptionMapper.updateSubscriptionFromDto(subscriptionDto, subscription)
     ));
+
+    restaurant.setRating(subscriptionRepository.averageOfRatingsByRestaurantId(restaurantId).orElse(0.0));
+    restaurantRepository.save(restaurant);
+    return updatedDto;
   }
 
   private Subscription getSubscriptionByUserIdAndRestaurantId(Long userId, Long restaurantId) {
@@ -98,28 +94,18 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         .orElseThrow(() -> new EntityNotFoundException("User"));
   }
 
-  private double calculateRating(int oldUserRating, int newUserRating, int numberOfRatings, double totalRating) {
-    double subtractedRating = subtractRating(oldUserRating, numberOfRatings, totalRating);
-
-    if (oldUserRating > 0) {
-      return addRating(newUserRating, numberOfRatings - 1, subtractedRating);
-    } else {
-      return addRating(newUserRating, numberOfRatings, subtractedRating);
-    }
-  }
-
-  private double subtractRating(int rating, int numberOfRatings, double totalRating) {
-    if (rating > 0) {
-      if (numberOfRatings - 1 == 0) {
-        return 0.0;
-      }
-
-      return (totalRating * numberOfRatings - rating) / (numberOfRatings - 1);
-    }
-
-    return totalRating;
-  }
-
+  /**
+   * An alternative way of adding a rating to an average. This method is preferred if performance is
+   * favored to precision.<br/>
+   * <em>-Note:</em> The method could be adapted to exchange a rating in the average but could
+   * lead to inaccurate averages when subtracting ratings.
+   *
+   * @param rating          the rating to add to the average.
+   * @param numberOfRatings the last registered total of ratings.
+   * @param totalRating     the last registered average of ratings.
+   * @return the new average of ratings.
+   */
+  @Deprecated
   private double addRating(int rating, int numberOfRatings, double totalRating) {
     if (rating <= 0) return totalRating;
     return totalRating + (rating - totalRating) / (numberOfRatings + 1);

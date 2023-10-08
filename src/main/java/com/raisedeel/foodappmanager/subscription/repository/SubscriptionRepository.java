@@ -16,6 +16,9 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Lon
 
   List<Subscription> findAllByRestaurantId(Long restaurantId);
 
+  @Query("select AVG(nullif(s.rating, 0)) from Subscription s where s.restaurant.id = :restaurantId")
+  Optional<Double> averageOfRatingsByRestaurantId(Long restaurantId);
+
   @Transactional
   @Modifying
   @Query("delete from Subscription s where s.user.id = :userId and s.restaurant.id = :restaurantId")
