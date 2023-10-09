@@ -97,7 +97,10 @@ public class SecurityConfig {
     http
         .csrf().disable()// CSRF disabled
         .authorizeHttpRequests()
-        .requestMatchers("/user/register").permitAll() // permitAll function will allow this endpoint to be accessed by non-authenticated users
+        .requestMatchers(
+            "/user/register", // permit all non-registered users to be registered to the app
+            "/v3/api-docs/**", "/swagger-ui/**") // permit all api documentation urls
+        .permitAll()
         .requestMatchers(HttpMethod.GET, "/restaurant/**", "/dish/**", "/subscription/**").permitAll()
         .requestMatchers(HttpMethod.PUT, "/user/{id}").access(
             (authentication, context) ->
