@@ -74,7 +74,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         subscriptionMapper.updateSubscriptionFromDto(subscriptionDto, subscription)
     ));
 
-    restaurant.setRating(subscriptionRepository.averageOfRatingsByRestaurantId(restaurantId).orElse(0.0));
+    restaurant.setRating(
+        subscriptionRepository.averageOfRatingsByRestaurantId(restaurantId).orElse(0.0)
+    );
     restaurantRepository.save(restaurant);
     return updatedDto;
   }
