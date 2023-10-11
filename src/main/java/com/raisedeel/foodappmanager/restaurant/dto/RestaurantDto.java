@@ -42,5 +42,7 @@ public class RestaurantDto {
   private BigDecimal rating;
 
   private String photoUrl = "";
+
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private List<DishDto> menu;
 }

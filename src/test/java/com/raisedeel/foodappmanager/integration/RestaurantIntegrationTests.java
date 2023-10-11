@@ -49,7 +49,7 @@ public class RestaurantIntegrationTests {
   @DisplayName("Check if a normal user can't promote other users")
   @Order(2)
   public void deniedPromotionToOwnerTest() throws Exception {
-    RequestBuilder request = MockMvcRequestBuilders.put("/user/upgrade/4/restaurant/1")
+    RequestBuilder request = MockMvcRequestBuilders.put("/user/promote/4/restaurant/1")
         .header("Authorization", JwtTokenUtil.createToken(users.get(0).getEmail(), users.get(0).getRole().toString()));
 
     mockMvc.perform(request)
@@ -61,7 +61,7 @@ public class RestaurantIntegrationTests {
   @DisplayName("Check if admin can promote an owner user")
   @Order(3)
   public void invalidPromotionFromOwnerToOwnerTest() throws Exception {
-    RequestBuilder request = MockMvcRequestBuilders.put("/user/upgrade/3/restaurant/1")
+    RequestBuilder request = MockMvcRequestBuilders.put("/user/promote/3/restaurant/1")
         .header("Authorization", JwtTokenUtil.createToken("admin", Role.ROLE_ADMIN.toString()));
 
     mockMvc.perform(request)
@@ -73,7 +73,7 @@ public class RestaurantIntegrationTests {
   @DisplayName("Check if admin can promote a normal user to an owner-less restaurant")
   @Order(4)
   public void successfulPromotionToOwnerTest() throws Exception {
-    RequestBuilder request = MockMvcRequestBuilders.put("/user/upgrade/2/restaurant/1")
+    RequestBuilder request = MockMvcRequestBuilders.put("/user/promote/2/restaurant/1")
         .header("Authorization", JwtTokenUtil.createToken("admin", Role.ROLE_ADMIN.toString()));
 
     mockMvc.perform(request)
@@ -85,7 +85,7 @@ public class RestaurantIntegrationTests {
   @DisplayName("Check if admin can promote a normal user to an owned restaurant")
   @Order(5)
   public void invalidPromotionToOwnerWithRestaurantOwnedTest() throws Exception {
-    RequestBuilder request = MockMvcRequestBuilders.put("/user/upgrade/4/restaurant/1")
+    RequestBuilder request = MockMvcRequestBuilders.put("/user/promote/4/restaurant/1")
         .header("Authorization", JwtTokenUtil.createToken("admin", Role.ROLE_ADMIN.toString()));
 
     mockMvc.perform(request)

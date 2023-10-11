@@ -120,7 +120,7 @@ public class SecurityConfig {
                     dishChecker.check(authentication.get(), Long.valueOf(context.getVariables().get("id")), true)
                 )
         )
-        .requestMatchers("/user/upgrade/**", "/user/demote/*", "/restaurant/remove/*").hasRole("ADMIN")
+        .requestMatchers("/user/promote/**", "/user/demote/*", "/restaurant/remove/*").hasRole("ADMIN")
         .anyRequest().authenticated() // Make all endpoint before this point ask for authentication
         .and()
         .authenticationProvider(customAuthenticationProvider) // This provider will handle JWT authentication

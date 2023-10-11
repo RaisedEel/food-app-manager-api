@@ -2,6 +2,7 @@ package com.raisedeel.foodappmanager.subscription.web;
 
 import com.raisedeel.foodappmanager.subscription.dto.SubscriptionDto;
 import com.raisedeel.foodappmanager.subscription.service.SubscriptionService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @AllArgsConstructor
+@Tag(name = "Subscription Controller", description = "Allow users the creation, retrieving, updating and deletion of subscriptions on any preferred restaurant.")
 @RestController
 @RequestMapping("/subscription")
 public class SubscriptionController {

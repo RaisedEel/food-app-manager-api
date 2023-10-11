@@ -2,6 +2,7 @@ package com.raisedeel.foodappmanager.restaurant.web;
 
 import com.raisedeel.foodappmanager.restaurant.dto.RestaurantDto;
 import com.raisedeel.foodappmanager.restaurant.service.RestaurantService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @AllArgsConstructor
+@Tag(name = "Restaurant Controller", description = "Allow owners the creation and updating of restaurants. All users are allowed retrieving of data. Deletion of restaurants is restricted to the admin.")
 @RestController
 @RequestMapping("/restaurant")
 public class RestaurantController {

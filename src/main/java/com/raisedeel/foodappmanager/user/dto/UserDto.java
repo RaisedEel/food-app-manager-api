@@ -3,6 +3,7 @@ package com.raisedeel.foodappmanager.user.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raisedeel.foodappmanager.restaurant.dto.RestaurantDto;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -32,5 +33,7 @@ public class UserDto {
   private String address;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  @Schema(accessMode = Schema.AccessMode.READ_ONLY)
   private RestaurantDto restaurantOwned;
 }
