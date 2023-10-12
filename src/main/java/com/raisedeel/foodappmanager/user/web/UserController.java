@@ -77,7 +77,7 @@ public class UserController {
     return new ResponseEntity<>(userService.retrieveOwners(), HttpStatus.OK);
   }
 
-  @Operation(summary = "Update a user", description = "Updates the past data of the user with the data sent. Requires a valid Bearer Token.")
+  @Operation(summary = "Update a user", description = "Updates the past data of the user using the data sent. Requires a valid Bearer Token.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Successful operation"),
       @ApiResponse(responseCode = "400", description = "Unsuccessful operation. Some fields/parameters were invalid or the email is duplicated",
@@ -99,7 +99,7 @@ public class UserController {
   @Operation(summary = "Promote a user to owner", description = "Promotes a normal user to an owner and then links a user and owner-less restaurant together. Requires the administrator.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content),
-      @ApiResponse(responseCode = "400", description = "Unsuccessful operation. Some fields/parameters were invalid",
+      @ApiResponse(responseCode = "400", description = "Unsuccessful operation. Some parameters were invalid or the restaurant has an owner",
           content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
       @ApiResponse(responseCode = "401", description = "The bearer could not be authenticated",
           content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
@@ -116,10 +116,10 @@ public class UserController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @Operation(summary = "Demotes a owner to a normal user", description = "Demotes a owner to a normal user, losing ownership on the restaurant on the process. Requires the administrator.")
+  @Operation(summary = "Demote a owner to a normal user", description = "Demotes a owner to a normal user, losing ownership of his restaurant on the process. Requires the administrator.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content),
-      @ApiResponse(responseCode = "400", description = "Unsuccessful operation. Some fields/parameters were invalid",
+      @ApiResponse(responseCode = "400", description = "Unsuccessful operation. The parameter was invalid",
           content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
       @ApiResponse(responseCode = "401", description = "The bearer could not be authenticated",
           content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
