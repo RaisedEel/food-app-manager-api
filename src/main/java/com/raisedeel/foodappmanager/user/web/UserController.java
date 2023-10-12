@@ -52,7 +52,7 @@ public class UserController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @Operation(summary = "Get a user", description = "Get the user with the given id. Requires a valid Bearer Token.")
+  @Operation(summary = "Get a user", description = "Gets the user with the given id. Requires a valid Bearer Token.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Successful operation"),
       @ApiResponse(responseCode = "400", description = "The id is not a number", content = @Content),
@@ -66,7 +66,7 @@ public class UserController {
     return new ResponseEntity<>(userService.retrieveUser(id), HttpStatus.OK);
   }
 
-  @Operation(summary = "Get all owners", description = "Get all the users that owns restaurants. Requires a valid Bearer Token.")
+  @Operation(summary = "Get all owners", description = "Gets all the users that owns restaurants. Requires a valid Bearer Token.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Successful operation"),
       @ApiResponse(responseCode = "401", description = "The bearer could not be authenticated",

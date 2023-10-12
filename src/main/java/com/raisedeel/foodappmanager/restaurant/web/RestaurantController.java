@@ -25,7 +25,7 @@ public class RestaurantController {
 
   RestaurantService restaurantService;
 
-  @Operation(summary = "Create a restaurant", description = "Create the restaurant using the data sent but will be owner-less. To complete the creation process an administrator has to promote a user. Requires a valid Bearer Token.")
+  @Operation(summary = "Create a restaurant", description = "Creates the restaurant using the data sent but will be owner-less. To complete the creation process an administrator has to promote a user. Requires a valid Bearer Token.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "201", description = "Successful creation"),
       @ApiResponse(responseCode = "400", description = "Unsuccessful creation. Some fields were invalid",
@@ -76,7 +76,7 @@ public class RestaurantController {
     return new ResponseEntity<>(restaurantService.updateRestaurant(id, restaurantDto), HttpStatus.OK);
   }
 
-  @Operation(summary = "Delete a restaurant", description = "Deletes a restaurant if its owner-less. Requires the administrator.")
+  @Operation(summary = "Delete a restaurant", description = "Deletes the restaurant with the given id, if its owner-less. Requires the administrator.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "204", description = "Successful operation", content = @Content),
       @ApiResponse(responseCode = "400", description = "Unsuccessful operation. The parameter was invalid or the restaurant has an owner still",
