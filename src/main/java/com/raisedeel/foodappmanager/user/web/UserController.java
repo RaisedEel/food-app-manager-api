@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @AllArgsConstructor
-@Tag(name = "User Controller", description = "Handle registering, authentication and modification of users. Includes promotions and demotions of owners (Admin endpoints).")
+@Tag(name = "1.- User Controller", description = "Handle registering, authentication and modification of users. Includes promotions and demotions of owners (Admin endpoints).")
 @RestController
 @RequestMapping("/user")
 public class UserController {

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @AllArgsConstructor
-@Tag(name = "Dish Controller", description = "Allow the owners creation, updating and deletion of dishes on their specific restaurant. All users are allowed retrieving of data.")
+@Tag(name = "4.- Dish Controller", description = "Allow the owners creation, updating and deletion of dishes on their specific restaurant. All users are allowed retrieving of data.")
 @RestController
 @RequestMapping("/dish")
 public class DishController {
@@ -56,11 +56,7 @@ public class DishController {
   }
 
   @Operation(summary = "Get all dishes from a restaurant", description = "Get all the dishes from the restaurant with the given id. No token is required.")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Successful operation"),
-      @ApiResponse(responseCode = "404", description = "The restaurant could not be found",
-          content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
-  })
+  @ApiResponse(responseCode = "200", description = "Successful operation")
   @GetMapping(value = "restaurant/{restaurantId}", produces = "application/json")
   public ResponseEntity<List<DishDto>> retrieveDishesByRestaurantHandler(@PathVariable Long restaurantId) {
     return new ResponseEntity<>(dishService.retrieveDishesByRestaurant(restaurantId), HttpStatus.OK);
