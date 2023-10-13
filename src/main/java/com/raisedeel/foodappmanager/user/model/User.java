@@ -11,6 +11,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * {@link Entity} class representing a user in the application. This class is used to map user-related data to the database and
+ * implements Spring Security's {@link UserDetails} interface for authentication.<br/>
+ * This entity creates a "users" table in the database and is designed for inheritance, allowing other user-related entities
+ * such as {@link UserOwner} (representing restaurant owners) to extend its functionality.
+ * <p/><b>Fields</b>
+ * <ul>
+ *   <li><b>Name:</b> The complete name of the user.</li>
+ *   <li><b>Email:</b> The email of the user, which must be unique.</li>
+ *   <li><b>Password:</b> The encoded password for this user.</li>
+ *   <li><b>Address:</b> The physical address of the user.</li>
+ *   <li><b>Role:</b> The {@link Role} of the user, which defines their privileges.</li>
+ *   <li><b>Subscriptions:</b> A list of restaurants to which the user is subscribed.</li>
+ * </ul>
+ *
+ * @see Entity
+ * @see UserDetails
+ * @see UserOwner
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

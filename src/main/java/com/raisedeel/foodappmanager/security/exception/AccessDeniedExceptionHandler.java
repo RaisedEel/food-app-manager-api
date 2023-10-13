@@ -28,6 +28,13 @@ public class AccessDeniedExceptionHandler implements AccessDeniedHandler {
 
   private HandlerExceptionResolver handlerExceptionResolver;
 
+  /**
+   * {@inheritDoc}
+   *
+   * @param request               that resulted in an <code>AccessDeniedException</code>
+   * @param response              so that the user agent can be advised of the failure
+   * @param accessDeniedException that caused the invocation
+   */
   @Override
   public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
     handlerExceptionResolver.resolveException(request, response, null, accessDeniedException);

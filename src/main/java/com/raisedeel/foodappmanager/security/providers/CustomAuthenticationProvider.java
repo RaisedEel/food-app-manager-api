@@ -27,6 +27,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
   private UserDetailsService userDetailsService;
 
   /**
+   * {@inheritDoc}
    * When called will get an {@link UserDetails} from the database using the {@link UserDetailsService}. This user will
    * be recovered using the {@link Authentication} received from an authentication filter. <br/>
    * Then will check if both the passwords from the user and the authentication coincide and return
@@ -42,7 +43,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
   }
-  
+
   @Override
   public boolean supports(Class<?> authentication) {
     return authentication.equals(UsernamePasswordAuthenticationToken.class);

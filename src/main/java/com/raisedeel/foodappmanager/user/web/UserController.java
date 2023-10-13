@@ -112,7 +112,7 @@ public class UserController {
   public ResponseEntity<HttpStatus> upgradeUserHandler(
       @PathVariable Long userId,
       @PathVariable Long restaurantId) {
-    userService.upgradeUser(userId, restaurantId);
+    userService.promoteUser(userId, restaurantId);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 

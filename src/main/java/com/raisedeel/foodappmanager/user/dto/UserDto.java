@@ -11,6 +11,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object (DTO) representing a user's information. This class is designed to encapsulate user data
+ * for communication between client and server. It enforces data validation rules for the user-related fields and
+ * supports serialization/deserialization of user information.
+ * <p/><b>Fields</b>
+ * <ul>
+ *   <li><b>Name:</b> The complete name of the user. <em>Cannot be blank.</em></li>
+ *   <li><b>Email:</b> The email of the user, which must be unique. <em>Cannot be blank.</em></li>
+ *   <li><b>Password:</b> Can only be written in a request and won't appear in a response. <em>Should be larger than 4 characters.</em></li>
+ *   <li><b>Address:</b> The physical address of the user. <em>Cannot be blank.</em></li>
+ *   <li><b>RestaurantOwned:</b> A {@link RestaurantDto} reference. This field is only visible to owner users and won't
+ *   appear to non-owner users.</li>
+ * </ul>
+ *
+ * @see com.raisedeel.foodappmanager.user.model.User
+ * @see RestaurantDto
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

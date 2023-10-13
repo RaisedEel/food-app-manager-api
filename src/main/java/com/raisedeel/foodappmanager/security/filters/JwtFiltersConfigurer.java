@@ -3,6 +3,7 @@ package com.raisedeel.foodappmanager.security.filters;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 
 /**
@@ -40,6 +41,11 @@ public class JwtFiltersConfigurer extends AbstractHttpConfigurer<JwtFiltersConfi
     return new JwtFiltersConfigurer();
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * @param http Builder to create a custom {@link SecurityFilterChain}.
+   */
   @Override
   public void configure(HttpSecurity http) throws Exception {
     // The authentication filter needs an Authentication Manager, in other to get it, it needs to be called here,

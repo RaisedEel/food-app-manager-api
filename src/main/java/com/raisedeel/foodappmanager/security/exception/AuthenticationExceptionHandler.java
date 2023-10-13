@@ -28,6 +28,13 @@ public class AuthenticationExceptionHandler implements AuthenticationEntryPoint 
 
   private HandlerExceptionResolver handlerExceptionResolver;
 
+  /**
+   * {@inheritDoc}
+   *
+   * @param request       that resulted in an <code>AuthenticationException</code>
+   * @param response      so that the user agent can begin authentication
+   * @param authException that caused the invocation
+   */
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
     handlerExceptionResolver.resolveException(request, response, null, authException);
