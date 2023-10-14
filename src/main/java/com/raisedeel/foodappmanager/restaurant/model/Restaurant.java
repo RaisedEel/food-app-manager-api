@@ -10,8 +10,9 @@ import lombok.*;
 import java.util.List;
 
 /**
- * {@link Entity} class representing a restaurant in the application. This class is used to map restaurant-related data to the database and
- * represents various attributes of a restaurant, including its name, type, description, contact information, and owner.
+ * {@link Entity} class representing a restaurant in the application. This class is used to map restaurant-related
+ * data to the database and represents various attributes of a restaurant, including its name, type, description,
+ * contact information, and owner.
  * <p/><b>Fields</b>
  * <ul>
  *   <li><b>ID:</b> The unique identifier for this restaurant, automatically assigned by Spring JPA upon creation.</li>

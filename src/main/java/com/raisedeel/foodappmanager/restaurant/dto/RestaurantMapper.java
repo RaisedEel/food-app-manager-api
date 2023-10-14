@@ -5,13 +5,16 @@ import com.raisedeel.foodappmanager.restaurant.model.Restaurant;
 import org.mapstruct.*;
 
 /**
- * A Mapper interface annotated with {@link Mapper} that converts between {@link Restaurant} and {@link RestaurantDto} objects using MapStruct. <br/>
+ * A Mapper interface annotated with {@link Mapper} that converts between {@link Restaurant} and {@link RestaurantDto}
+ * objects using MapStruct. <br/>
  * This interface defines methods for mapping Restaurant objects to RestaurantDto objects and vice versa.
  * It also provides a method for updating a Restaurant object from a RestaurantDto while ignoring null values.
+ * Additionally, this mapper utilizes {@link DishMapper} for conversions involving Dish and DishDto objects.
  *
  * @see Mapper
  * @see Restaurant
  * @see RestaurantDto
+ * @see DishMapper
  */
 @Mapper(
     componentModel = "spring",
@@ -38,6 +41,7 @@ public interface RestaurantMapper {
 
   /**
    * Updates a {@link Restaurant} object from a {@link RestaurantDto} while ignoring null values.
+   * This method is useful for selectively updating Restaurant attributes.
    *
    * @param restaurantDto the {@link RestaurantDto} containing updated information.
    * @param restaurant    the {@link Restaurant} object to be updated.

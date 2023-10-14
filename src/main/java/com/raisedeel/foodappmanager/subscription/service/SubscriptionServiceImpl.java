@@ -14,6 +14,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Implementation of the {@link SubscriptionService} interface for subscription management operations.
+ * This class provides concrete implementations of methods for managing subscription data, including subscription creation,
+ * retrieval, update, and deletion. It collaborates with various repositories and mappers to fulfill its functionality.
+ *
+ * @see SubscriptionService
+ */
 @AllArgsConstructor
 @Service
 public class SubscriptionServiceImpl implements SubscriptionService {
@@ -23,6 +30,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
   UserRepository userRepository;
   SubscriptionMapper subscriptionMapper;
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public SubscriptionDto retrieveSubscription(Long userId, Long restaurantId) {
     return subscriptionMapper.subscriptionToDto(
@@ -30,6 +40,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     );
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public List<SubscriptionDto> retrieveSubscriptionsFromUser(Long userId) {
     return subscriptionRepository.findAllByUserId(userId)
@@ -38,6 +51,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         .toList();
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public List<SubscriptionDto> retrieveSubscriptionsFromRestaurants(Long restaurantId) {
     return subscriptionRepository.findAllByRestaurantId(restaurantId)
@@ -46,7 +62,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         .toList();
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public SubscriptionDto subscribeToRestaurant(Long userId, Long restaurantId) {
     User user = getUserById(userId);
@@ -59,12 +77,20 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     return subscriptionMapper.subscriptionToDto(subscriptionRepository.save(subscription));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void unsubscribeToRestaurant(Long userId, Long restaurantId) {
     updateRating(new SubscriptionDto(), userId, restaurantId);
     subscriptionRepository.deleteByUserIdAndRestaurantId(userId, restaurantId);
   }
 
+  /**
+   * {@inheritDoc}
+   * Subsequently, this operation updates the average rating in the associated {@link Restaurant} entity,
+   * identified by the restaurantId parameter.
+   */
   @Override
   public SubscriptionDto updateRating(SubscriptionDto subscriptionDto, Long userId, Long restaurantId) {
     Restaurant restaurant = getRestaurantById(restaurantId);
