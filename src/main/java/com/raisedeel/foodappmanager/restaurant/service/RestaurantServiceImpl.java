@@ -11,6 +11,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Implementation of the {@link RestaurantService} interface for restaurant management operations.
+ * This class provides concrete implementations of methods for managing restaurant data, including restaurant creation,
+ * retrieval, update, and deletion. It collaborates with various repositories and mappers to fulfill its functionality.
+ *
+ * @see RestaurantService
+ */
 @AllArgsConstructor
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -18,17 +25,26 @@ public class RestaurantServiceImpl implements RestaurantService {
   RestaurantRepository restaurantRepository;
   RestaurantMapper restaurantMapper;
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public RestaurantDto createRestaurant(RestaurantDto restaurantDto) {
     Restaurant restaurant = restaurantMapper.dtoToRestaurant(restaurantDto);
     return restaurantMapper.restaurantToDto(restaurantRepository.save(restaurant));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public RestaurantDto retrieveRestaurant(Long id) {
     return restaurantMapper.restaurantToDto(getRestaurantById(id));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public List<RestaurantDto> retrieveRestaurants() {
     return ((List<Restaurant>) restaurantRepository.findAll())
@@ -37,6 +53,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         .toList();
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public RestaurantDto updateRestaurant(Long id, RestaurantDto restaurantDto) {
     Restaurant updatedRestaurant = restaurantMapper.updateRestaurantFromDto(
@@ -47,6 +66,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     return restaurantMapper.restaurantToDto(restaurantRepository.save(updatedRestaurant));
   }
 
+  /**
+   * {@inheritDoc}
+   * The restaurant must be owner-less.
+   */
   @Override
   public void deleteRestaurant(Long id) {
     Restaurant restaurant = getRestaurantById(id);

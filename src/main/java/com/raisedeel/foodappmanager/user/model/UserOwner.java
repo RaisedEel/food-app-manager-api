@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * {@link Entity} class that represents a user owning a restaurant in the application.<br/>
- * This class extends the base {@link User} class and includes a reference to the restaurant they own.
+ * This class extends the base {@link User} class and includes a reference to the {@link Restaurant} they own.
  * It creates a new table in the database called "owners," which references the table created by the {@link User} class.
  *
  * @see User

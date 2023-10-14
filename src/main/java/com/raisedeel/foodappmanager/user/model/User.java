@@ -18,17 +18,19 @@ import java.util.List;
  * such as {@link UserOwner} (representing restaurant owners) to extend its functionality.
  * <p/><b>Fields</b>
  * <ul>
+ *   <li><b>ID:</b> The unique identifier for this entity, automatically assigned by Spring JPA upon creation.</li>
  *   <li><b>Name:</b> The complete name of the user.</li>
  *   <li><b>Email:</b> The email of the user, which must be unique.</li>
  *   <li><b>Password:</b> The encoded password for this user.</li>
  *   <li><b>Address:</b> The physical address of the user.</li>
  *   <li><b>Role:</b> The {@link Role} of the user, which defines their privileges.</li>
- *   <li><b>Subscriptions:</b> A list of restaurants to which the user is subscribed.</li>
+ *   <li><b>Subscriptions:</b> A list of user subscriptions to restaurants, linked to the {@link Subscription} entity.</li>
  * </ul>
  *
  * @see Entity
  * @see UserDetails
  * @see UserOwner
+ * @see Subscription
  */
 @Data
 @AllArgsConstructor

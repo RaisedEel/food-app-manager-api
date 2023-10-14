@@ -20,14 +20,14 @@ public interface UserService {
   UserDto createUser(UserDto userDto);
 
   /**
-   * Retrieve all owners from the database.
+   * Retrieves all owners from the database.
    *
    * @return a list of {@link UserDto} representing all owners.
    */
   List<UserDto> retrieveOwners();
 
   /**
-   * Retrieve the user with the given id.
+   * Retrieves the user with the given id.
    *
    * @param id the ID of the user to retrieve.
    * @return the {@link UserDto} representing the retrieved user.

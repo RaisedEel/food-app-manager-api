@@ -6,8 +6,8 @@ import com.raisedeel.foodappmanager.user.model.UserOwner;
 import org.mapstruct.*;
 
 /**
- * A Mapper interface annotated with {@link Mapper} that converts between {@link User} and {@link UserDto} objects using MapStruct.
- * This interface defines methods for mapping User objects to UserDto objects and vice versa.<br/>
+ * A Mapper interface annotated with {@link Mapper} that converts between {@link User} and {@link UserDto} objects using MapStruct.<br/>
+ * This interface defines methods for mapping User objects to UserDto objects and vice versa.
  * It also provides a method for updating a User object from a UserDto while ignoring null values.
  *
  * @see Mapper
