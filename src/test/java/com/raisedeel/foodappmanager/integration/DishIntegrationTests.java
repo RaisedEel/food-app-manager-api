@@ -108,7 +108,7 @@ public class DishIntegrationTests {
                     dishes.get(0).getPrice(),
                     "Salads",
                     "Simple salad",
-                    dishes.get(0).getPhotoUlr(),
+                    dishes.get(0).getPhotoUrl(),
                     null)
             ));
 
