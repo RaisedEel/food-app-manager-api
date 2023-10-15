@@ -19,7 +19,8 @@ import java.util.Optional;
  *   <li>Retrieve subscription entities by their IDs.</li>
  *   <li>Save new subscription entities or update existing ones.</li>
  *   <li>Delete subscription entities by their IDs.</li>
- *   <li>Query and filter subscription entities using Spring Data JPA repository query methods.</li>
+ *   <li>Query and filter subscription entities using Spring Data JPA repository query methods,
+ *   including operations such as calculating the average rating.</li>
  * </ul>
  *
  * @see CrudRepository
