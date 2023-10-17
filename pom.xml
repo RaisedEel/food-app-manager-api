@@ -136,6 +136,14 @@
           </annotationProcessorPaths>
         </configuration>
       </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <includes>
+            <include>**/FoodAppManagerApplicationTests.java</include>
+          </includes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 

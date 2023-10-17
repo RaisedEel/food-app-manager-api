@@ -14,7 +14,7 @@ import java.util.Arrays;
 @DisplayName("Tests to check if the calculation of averages of ratings is accurate for many ratings")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SubscriptionServiceTest {
+public class SubscriptionRepositoryTest {
 
   @Autowired
   RestaurantRepository restaurantRepository;
